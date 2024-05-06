@@ -1,32 +1,11 @@
 import React from 'react';
 import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
-import { useRoute } from "@react-navigation/native";
 
-export default function EvalScreen({ navigation }) {
-
-    const renderButtons = () => {
-
-        const buttonItems = [];
-
-        for (let i = 0; i < 3; i++) {
-            buttonItems.push(
-                <View style={styles.classRow} key={i}>
-                    <TouchableOpacity style={styles.classButton} onPress={() => navigation.navigate('EvalClass', {id: "45b"})}>
-                        <Text style={styles.sigleText}>PROG1297</Text>
-                        <Text style={styles.classText}>Programmation Web PHP et Ajax</Text>
-                    </TouchableOpacity>
-                </View>
-            );
-        }
-
-        return buttonItems;
-    }
-
+export default function EvalScreen(props) {
     return (
         <View style={styles.container}>
             <Text style={styles.evalTitle}>Mes évaluations</Text>
 
-            {/*use api to display session*/}
             <Text style={styles.evalSessionText}>Session actuelle: Printemps 2024</Text>
 
             <View style={styles.classLabels}>
@@ -34,7 +13,25 @@ export default function EvalScreen({ navigation }) {
                 <Text style={styles.titleLabel}>Titre du cour</Text>
             </View>
             <View style={styles.classContainer}>
-                {renderButtons()}
+                {/*Loop here for classes*/}
+                <View style={styles.classRow}>
+                    <TouchableOpacity style={styles.classButton}>
+                        <Text style={styles.sigleText}>PROG1297</Text>
+                        <Text style={styles.classText}>Programmation Web PHP et Ajax</Text>
+                    </TouchableOpacity>
+                </View>
+                <View style={styles.classRow}>
+                    <TouchableOpacity style={styles.classButton}>
+                        <Text style={styles.sigleText}>PROG1301</Text>
+                        <Text style={styles.classText}>Projet de developpement d'applications informatiques</Text>
+                    </TouchableOpacity>
+                </View>
+                <View style={styles.classRow}>
+                    <TouchableOpacity style={styles.classButton}>
+                        <Text style={styles.sigleText}>PROG1342</Text>
+                        <Text style={styles.classText}>Developpement d'applications mobiles multiplateformes</Text>
+                    </TouchableOpacity>
+                </View>
             </View>
         </View>
     );
