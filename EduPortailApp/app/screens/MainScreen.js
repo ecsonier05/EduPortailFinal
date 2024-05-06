@@ -17,6 +17,41 @@ export default function MainScreen({ navigation }) {
     let moyGenerale = 86.50;
     moyGenerale = moyGenerale.toFixed(2);
 
+    const renderEvals = () => {
+
+        const evalItems = [];
+
+        for (let i = 0; i < 3; i++) {
+            evalItems.push(
+                <View style={styles.evalRow} key={i}>
+                    <Text numberOfLines={1} style={styles.evalText}>SYST1036</Text>
+                    <Text numberOfLines={1} style={styles.evalText}>Projet 1 L'analyse</Text>
+                    <Text numberOfLines={1} style={styles.evalText}>92.81%</Text>
+                </View>
+            );
+        }
+
+        return evalItems;
+    }
+
+    const renderRetro = () => {
+
+        const retroItems = [];
+
+        for (let i = 0; i < 3; i++) {
+            retroItems.push(
+                <View style={styles.retroRow} key={i}>
+                    <Text numberOfLines={1} style={styles.retroText}>SYST1036   Devoir 2 - Phase B - Partie 3</Text>
+                    <TouchableOpacity style={styles.retroButton} onPress={() => navigation.navigate('EvalClass', {id: "45b"})}>
+                        <Text style={styles.retroBtnText}>Voir Plus</Text>
+                    </TouchableOpacity>
+                </View>
+            );
+        }
+
+        return retroItems;
+    }
+
     return (
         <View style={styles.container}>
             <View style={styles.titleContainer}>
