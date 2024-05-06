@@ -1,13 +1,39 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
 import { RadioButton } from 'react-native-paper';
 
-function PerfScreen(props) {
+function PerfScreen({ navigation }) {
+
+    let table = ["un", "deux", "trois"]; 
 
     //Radio Buttons
-    const [courChecked, setCourChecked] = React.useState('first');
-    const [resultChecked, setResultChecked] = React.useState('first');
+    const [courChecked, setCourChecked] = React.useState('un');
+    const [resultChecked, setResultChecked] = React.useState('moy');
+
+    const renderRadio = () => {
+
+        const radioItems = [];
+
+        for (let i = 0; i < 3; i++) {
+            radioItems.push(
+                <View style={styles.checkContainer} key={i}>
+                    <View style={styles.checkContent}>
+                        <RadioButton 
+                            value="first"
+                            status={ courChecked === table[i] ? 'checked' : 'unchecked' }
+                            onPress={() => setCourChecked(table[i])}
+                            color="#3d88ec"
+                        />
+                        <Text style={styles.titleContent}>PROG1297</Text>
+                    </View>
+                    <Text style={styles.descContent}>Programmation Web PHP et Ajax</Text>
+                </View>
+            );
+        }
+
+        return radioItems;
+    }
 
     //Drop Down List
     const data = [
@@ -63,7 +89,7 @@ function PerfScreen(props) {
                 <RadioButton.Group onValueChange={resultChecked => setResultChecked(resultChecked)} value={resultChecked}>
                     <RadioButton.Item 
                         label="Moyenne generale" 
-                        value="first" 
+                        value="moy" 
                         color="#3d88ec"
                         uncheckedColor="#3d88ec"
                         style={styles.resultRadioButtons}
@@ -71,7 +97,7 @@ function PerfScreen(props) {
                     />
                     <RadioButton.Item 
                         label="Note d'evaluation" 
-                        value="second"
+                        value="note"
                         color="#3d88ec"
                         uncheckedColor="#3d88ec"
                         style={styles.resultRadioButtons} 
@@ -81,53 +107,11 @@ function PerfScreen(props) {
             </View>
             <View style={styles.coursContainer}>
                 <Text style={styles.contLabel}>Cours</Text>
-
-                <View style={styles.checkRow}>
-                    {/*loop for render*/}
-                    <View style={styles.checkContainer}>
-                        <View style={styles.checkContent}>
-                            <RadioButton 
-                                value="first"
-                                status={ courChecked === 'first' ? 'checked' : 'unchecked' }
-                                onPress={() => setCourChecked('first')}
-                                color="#3d88ec"
-                            />
-                            <Text style={styles.titleContent}>PROG1297</Text>
-                        </View>
-
-                        <Text style={styles.descContent}>Programmation Web PHP et Ajax</Text>
-                    </View>
-
-                    <View style={styles.checkContainer}>
-                        <View style={styles.checkContent}>
-                            <RadioButton 
-                                value="second"
-                                status={ courChecked === 'second' ? 'checked' : 'unchecked' }
-                                onPress={() => setCourChecked('second')}
-                                color="#3d88ec"
-                            />
-                            <Text style={styles.titleContent}>PROG1297</Text>
-                        </View>
-
-                        <Text style={styles.descContent}>Programmation Web PHP et Ajax</Text>
-                    </View>
-
-                    <View style={styles.checkContainer}>
-                        <View style={styles.checkContent}>
-                            <RadioButton 
-                                value="third"
-                                status={ courChecked === 'third' ? 'checked' : 'unchecked' }
-                                onPress={() => setCourChecked('third')}
-                                color="#3d88ec"
-                            />
-                            <Text style={styles.titleContent}>PROG1297</Text>
-                        </View>
-
-                        <Text style={styles.descContent}>Programmation Web PHP et Ajax</Text>
-                    </View>
-                </View>
+                <ScrollView horizontal>
+                    {renderRadio()}        
+                </ScrollView>
             </View>
-            <TouchableOpacity style={styles.submitButton}>
+            <TouchableOpacity style={styles.submitButton} onPress={() => navigation.navigate('PerfInfo', {id: courChecked, mode: resultChecked})}>
                 <Text style={styles.submitText}>OK</Text>
             </TouchableOpacity>
         </View>
@@ -218,10 +202,6 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         position: 'absolute',
         top: 550,
-    },
-    checkRow:{
-        flexDirection: 'row',
-        marginTop: 10,
     },
     checkContainer: {
         marginLeft: 5
