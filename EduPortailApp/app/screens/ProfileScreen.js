@@ -8,7 +8,8 @@ export default function ProfileScreen(props) {
     const [loading, setLoading] = useState(true);
 
     const matricule = 2051798;
-    const url = `https://eduportail-69af4de32dad.herokuapp.com/api/etudiants/${matricule}`;
+    // const url = `https://eduportail-69af4de32dad.herokuapp.com/api/etudiants/${matricule}`;
+    const url = `http://10.0.2.2/api/eduportail/getEtudiant?matricule=${matricule}`;
 
     useEffect(() => {
         fetch(url)
