@@ -8,8 +8,8 @@ export default function ProfileScreen(props) {
     const [loading, setLoading] = useState(true);
 
     const matricule = 2051798;
-    const url = `https://eduportail-69af4de32dad.herokuapp.com/api/etudiants/${matricule}`;
-    // const url = `http://10.0.2.2/api/eduportail/getEtudiant?matricule=${matricule}`;
+    // const url = `https://eduportail-69af4de32dad.herokuapp.com/api/etudiants/${matricule}`;
+    const url = `http://10.0.2.2/api/eduportail/getEtudiant?matricule=${matricule}`;
 
     useEffect(() => {
         fetch(url)
@@ -37,19 +37,19 @@ export default function ProfileScreen(props) {
                     <View style={styles.infoContainer}>
                         <View style={styles.tfContainer}>
                             <Text style={styles.fieldText}>Prénom</Text>
-                            <TextInput style={styles.fieldInput} editable={false} value={data.prenom} />
+                            <TextInput style={styles.fieldInput} editable={false} placeholder={data.prenom} />
                         </View>
                         <View style={styles.tfContainer}>
                             <Text style={styles.fieldText}>Nom</Text>
-                            <TextInput style={styles.fieldInput} editable={false} value={data.nom} />
+                            <TextInput style={styles.fieldInput} editable={false} placeholder={data.nom} />
                         </View>
                         <View style={styles.tfContainer}>
                             <Text style={styles.fieldText}>Nom d'utilisateur</Text>
-                            <TextInput style={styles.fieldInput} editable={false} value={data.nomUtilisateur} />
+                            <TextInput style={styles.fieldInput} editable={false} placeholder={data.nomUtilisateur} />
                         </View>
                         <View style={styles.tfContainer}>
                             <Text style={styles.fieldText}>Matricule</Text>
-                            <TextInput style={styles.fieldInput} editable={false} value={data.matricule} />
+                            <TextInput style={styles.fieldInput} editable={false} placeholder={data.matricule} />
                         </View>
                         <View style={styles.tfContainer}>
                             <Text style={styles.fieldText}>Programme</Text>
