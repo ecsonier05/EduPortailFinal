@@ -42,7 +42,7 @@ export default function MainScreen({ navigation }) {
             retroItems.push(
                 <View style={styles.retroRow} key={i}>
                     <Text numberOfLines={1} style={styles.retroText}>SYST1036   Devoir 2 - Phase B - Partie 3</Text>
-                    <TouchableOpacity style={styles.retroButton}>
+                    <TouchableOpacity style={styles.retroButton} onPress={() => navigation.navigate('EvalClass', {id: "45b"})}>
                         <Text style={styles.retroBtnText}>Voir Plus</Text>
                     </TouchableOpacity>
                 </View>
