@@ -41,15 +41,15 @@ export default function ProfileScreen(props) {
                         </View>
                         <View style={styles.tfContainer}>
                             <Text style={styles.fieldText}>Nom</Text>
-                            <TextInput style={styles.fieldInput} editable={false} value={data.nom} />
+                            <TextInput style={styles.fieldInput} editable={false} placeholder={"Doe"} />
                         </View>
                         <View style={styles.tfContainer}>
                             <Text style={styles.fieldText}>Nom d'utilisateur</Text>
-                            <TextInput style={styles.fieldInput} editable={false} value={data.nomUtilisateur} />
+                            <TextInput style={styles.fieldInput} editable={false} placeholder={"ejdoe03"} />
                         </View>
                         <View style={styles.tfContainer}>
                             <Text style={styles.fieldText}>Matricule</Text>
-                            <TextInput style={styles.fieldInput} editable={false} value={data.matricule} />
+                            <TextInput style={styles.fieldInput} editable={false} placeholder={"2222222"} />
                         </View>
                         <View style={styles.tfContainer}>
                             <Text style={styles.fieldText}>Programme</Text>
@@ -57,7 +57,7 @@ export default function ProfileScreen(props) {
                         </View>
                         <View style={styles.tfContainer}>
                             <Text style={styles.fieldText}>Courriel</Text>
-                            <TextInput style={styles.fieldInput} editable={false} value={data.courrielEtudiant} />
+                            <TextInput style={styles.fieldInput} editable={false} placeholder={"ejdoe@monccnb.ca"} />
                         </View>
                         <View style={styles.tfContainer}>
                             <Text style={styles.fieldText}>Année d'étude</Text>
