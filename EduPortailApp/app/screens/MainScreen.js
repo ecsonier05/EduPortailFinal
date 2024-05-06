@@ -17,6 +17,41 @@ export default function MainScreen({ navigation }) {
     let moyGenerale = 86.50;
     moyGenerale = moyGenerale.toFixed(2);
 
+    const renderEvals = () => {
+
+        const evalItems = [];
+
+        for (let i = 0; i < 3; i++) {
+            evalItems.push(
+                <View style={styles.evalRow} key={i}>
+                    <Text numberOfLines={1} style={styles.evalText}>SYST1036</Text>
+                    <Text numberOfLines={1} style={styles.evalText}>Projet 1 L'analyse</Text>
+                    <Text numberOfLines={1} style={styles.evalText}>92.81%</Text>
+                </View>
+            );
+        }
+
+        return evalItems;
+    }
+
+    const renderRetro = () => {
+
+        const retroItems = [];
+
+        for (let i = 0; i < 3; i++) {
+            retroItems.push(
+                <View style={styles.retroRow} key={i}>
+                    <Text numberOfLines={1} style={styles.retroText}>SYST1036   Devoir 2 - Phase B - Partie 3</Text>
+                    <TouchableOpacity style={styles.retroButton}>
+                        <Text style={styles.retroBtnText}>Voir Plus</Text>
+                    </TouchableOpacity>
+                </View>
+            );
+        }
+
+        return retroItems;
+    }
+
     return (
         <View style={styles.container}>
             <View style={styles.titleContainer}>
@@ -41,25 +76,10 @@ export default function MainScreen({ navigation }) {
 
             <View style={styles.evalContainer}>
                 <Text style={styles.contTitle}>Notes d'évaluation récentes</Text>
+                {renderEvals()}
 
-                {/*add a for loop here*/}
-                <View style={styles.evalRow}>
-                    <Text numberOfLines={1} style={styles.evalText}>SYST1036</Text>
-                    <Text numberOfLines={1} style={styles.evalText}>Projet 1 L'analyse</Text>
-                    <Text numberOfLines={1} style={styles.evalText}>92.81%</Text>
-                </View>
-                <View style={styles.evalRow}>
-                    <Text numberOfLines={1} style={styles.evalText}>PROG1206</Text>
-                    <Text numberOfLines={1} style={styles.evalText}>Test 2</Text>
-                    <Text numberOfLines={1} style={styles.evalText}>92.81%</Text>
-                </View>
-                <View style={styles.evalRow}>
-                    <Text numberOfLines={1} style={styles.evalText}>PROG1236</Text>
-                    <Text numberOfLines={1} style={styles.evalText}>Devoir 2 - Phase B - partie 1</Text>
-                    <Text numberOfLines={1} style={styles.evalText}>97.19%</Text>
-                </View>
                 {/*Add function to pressable*/}
-                <TouchableOpacity style={styles.evalButton}>
+                <TouchableOpacity style={styles.evalButton} onPress={() => navigation.navigate('Évaluations')}>
                         <Text style={styles.evalBtnText}>Voir Plus</Text>
                 </TouchableOpacity>
             </View>
@@ -69,24 +89,7 @@ export default function MainScreen({ navigation }) {
 
                 {/*for loop for 3 most recent*/}
                 {/*add function to pressable*/}
-                <View style={styles.retroRow}>
-                    <Text numberOfLines={1} style={styles.retroText}>SYST1036   Devoir 2 - Phase B - Partie 3</Text>
-                    <TouchableOpacity style={styles.retroButton}>
-                        <Text style={styles.retroBtnText}>Voir Plus</Text>
-                    </TouchableOpacity>
-                </View>
-                <View style={styles.retroRow}>
-                    <Text numberOfLines={1} style={styles.retroText}>PROG1206   Test 2</Text>
-                    <TouchableOpacity style={styles.retroButton}>
-                        <Text style={styles.retroBtnText}>Voir Plus</Text>
-                    </TouchableOpacity>
-                </View>
-                <View style={styles.retroRow}>
-                    <Text numberOfLines={1} style={styles.retroText}>{"SYST1036   Projet 1 - L'analyse"}</Text>
-                    <TouchableOpacity style={styles.retroButton}>
-                        <Text style={styles.retroBtnText}>Voir Plus</Text>
-                    </TouchableOpacity>
-                </View>
+                {renderRetro()}
             </View>
 
             {/*backend code to check the highest and lowest grades*/}
