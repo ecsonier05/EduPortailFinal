@@ -6,7 +6,7 @@
 
         $matricule = mysqli_real_escape_string($conn, $_GET['matricule']);
     
-        $sql = "SELECT prenom
+        $sql = "SELECT prenom, nom, nomUtilisateur, matricule
         FROM etudiants
         WHERE matricule = '$matricule'";
     
