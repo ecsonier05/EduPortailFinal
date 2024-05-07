@@ -46,17 +46,6 @@ function PerfScreen({ navigation }) {
     const [value, setValue] = useState(null);
     const [isFocus, setIsFocus] = useState(false);
 
-    const renderLabel = () => {
-      if (value || isFocus) {
-        return (
-          <Text style={[styles.label, isFocus && { color: 'blue' }]}>
-            Dropdown label
-          </Text>
-        );
-      }
-      return null;
-    };
-
     return (
         <View style={styles.container}>
             <Text style={styles.perfTitle}>Ma performance</Text>
@@ -105,12 +94,17 @@ function PerfScreen({ navigation }) {
                 </RadioButton.Group>
 
             </View>
+
+            {resultChecked != 'moy' ?(
             <View style={styles.coursContainer}>
                 <Text style={styles.contLabel}>Cours</Text>
                 <ScrollView horizontal>
                     {renderRadio()}        
                 </ScrollView>
             </View>
+            ) : (
+            <View style={styles.coursContainer}></View>    
+            )}
             <TouchableOpacity style={styles.submitButton} onPress={() => navigation.navigate('PerfInfo', {id: courChecked, mode: resultChecked})}>
                 <Text style={styles.submitText}>OK</Text>
             </TouchableOpacity>

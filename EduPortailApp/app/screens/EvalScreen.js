@@ -1,6 +1,5 @@
 import React from 'react';
 import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
-import { useRoute } from "@react-navigation/native";
 
 export default function EvalScreen({ navigation }) {
 
