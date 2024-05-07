@@ -53,15 +53,15 @@ export default function ProfileScreen(props) {
                         </View>
                         <View style={styles.tfContainer}>
                             <Text style={styles.fieldText}>Programme</Text>
-                            <TextInput style={styles.fieldInput} editable={false} placeholder={"Programmation et applications mobiles"} />
+                            <TextInput style={styles.fieldInput} editable={false} placeholder={data.titreProgramme} />
                         </View>
                         <View style={styles.tfContainer}>
                             <Text style={styles.fieldText}>Courriel</Text>
-                            <TextInput style={styles.fieldInput} editable={false} placeholder={"ejdoe@monccnb.ca"} />
+                            <TextInput style={styles.fieldInput} editable={false} placeholder={data.courrielEtudiant} />
                         </View>
                         <View style={styles.tfContainer}>
                             <Text style={styles.fieldText}>Année d'étude</Text>
-                            <TextInput style={styles.fieldInput} editable={false} placeholder={"2"} />
+                            <TextInput style={styles.fieldInput} editable={false} placeholder={data.dureeAnnee} />
                         </View>
                     </View>
 

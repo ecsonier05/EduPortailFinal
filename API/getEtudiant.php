@@ -6,9 +6,12 @@
 
         $matricule = mysqli_real_escape_string($conn, $_GET['matricule']);
     
-        $sql = "SELECT prenom, nom, nomUtilisateur, matricule
+        $sql = "SELECT prenom, nom, nomUtilisateur, matricule, titreProgramme, courrielEtudiant, dureeAnnee
         FROM etudiants
-        WHERE matricule = '$matricule'";
+        INNER JOIN campus_programmes
+        INNER JOIN programmes
+        WHERE matricule = '$matricule'
+        AND campus_programmes_programmes_idProgramme = idProgramme";
     
         $result = mysqli_query($conn, $sql);
     
