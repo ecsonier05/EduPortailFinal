@@ -77,19 +77,28 @@ function PerfScreen({ navigation }) {
                 {/*rework with radiobutton.item*/}
                 <RadioButton.Group onValueChange={resultChecked => setResultChecked(resultChecked)} value={resultChecked}>
                     <RadioButton.Item 
-                        label="Moyenne generale" 
+                        label="Moyenne generale"
                         value="moy" 
-                        color="#3d88ec"
-                        uncheckedColor="#3d88ec"
+                        color="white"
+                        uncheckedColor="white"
                         style={styles.resultRadioButtons}
-                        
+                        labelStyle={{
+                            color: 'white',
+                            fontWeight: 'bold',
+                            fontSize: 20
+                        }}
                     />
                     <RadioButton.Item 
                         label="Note d'evaluation" 
                         value="note"
-                        color="#3d88ec"
-                        uncheckedColor="#3d88ec"
-                        style={styles.resultRadioButtons} 
+                        color="white"
+                        uncheckedColor="white"
+                        style={styles.resultRadioButtons}
+                        labelStyle={{
+                            color: 'white',
+                            fontWeight: 'bold',
+                            fontSize: 20  
+                        }}
                     />
                 </RadioButton.Group>
 
@@ -115,7 +124,7 @@ function PerfScreen({ navigation }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#E0E0E0',
+        backgroundColor: '#e7eff6',
         alignItems: 'center',
         justifyContent: 'flex-end',
     },
@@ -141,7 +150,7 @@ const styles = StyleSheet.create({
         marginTop: 5,
     },
     sessionContainer: {
-        backgroundColor: '#B0B0B0',
+        backgroundColor: '#adcbe3',
         width: '90%',
         height: 220,
         borderRadius: 5,
@@ -170,19 +179,17 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
     resultContainer: {
-        backgroundColor: '#B0B0B0',
+        backgroundColor: '#adcbe3',
         width: '90%',
-        height: 140,
+        height: 130,
         borderRadius: 5,
         position: 'absolute',
-        top: 400,
+        top: 395,
     },
     resultRadioButtons: {
         marginVertical: 0.5,
         borderRadius: 5,
-        borderWidth: 2,
-        borderColor: '#3d88ec',
-        backgroundColor: '#77b7f3',
+        backgroundColor: '#4b86b4',
     },
     buttonText: {
         fontSize: 20,
@@ -190,12 +197,12 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     coursContainer: {
-        backgroundColor: '#B0B0B0',
+        backgroundColor: '#adcbe3',
         width: '90%',
-        height: 150,
+        height: 110,
         borderRadius: 5,
         position: 'absolute',
-        top: 550,
+        top: 530,
     },
     checkContainer: {
         marginLeft: 5
@@ -214,14 +221,14 @@ const styles = StyleSheet.create({
         fontSize: 10,
     },
     submitButton: {
-        backgroundColor: '#3d88ec',
+        backgroundColor: '#2a4d69',
         width: '90%',
         height: 40,
         borderRadius: 5,
         alignItems: 'center',
         justifyContent: 'center',
         position: 'absolute',
-        top: 710,
+        top: 645,
     },
     submitText: {
         color: 'white',

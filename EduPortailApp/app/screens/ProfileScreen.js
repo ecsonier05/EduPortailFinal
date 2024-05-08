@@ -36,7 +36,7 @@ export default function ProfileScreen(props) {
                     <View style={styles.infoContainer}>
                         <View style={styles.tfContainer}>
                             <Text style={styles.fieldText}>Prénom</Text>
-                            <TextInput style={styles.fieldInput} editable={false} value={data.prenom} />
+                            <TextInput style={styles.fieldInput} editable={false} placeholder={"temp"} />
                         </View>
                         <View style={styles.tfContainer}>
                             <Text style={styles.fieldText}>Nom</Text>
@@ -78,14 +78,14 @@ export default function ProfileScreen(props) {
                         <View style={styles.notifRow}>
                             <Text style={styles.appText}>Application</Text>
                             <BouncyCheckbox 
-                                fillColor='#3d88ec'
+                                fillColor='white'
                                 
                             />
                         </View>
                         <View style={styles.notifRow}>
                             <Text style={styles.appText}>Courriel</Text>
                             <BouncyCheckbox 
-                                fillColor='#3d88ec'
+                                fillColor='white'
                             />
                         </View>
                     </View>
@@ -98,7 +98,7 @@ export default function ProfileScreen(props) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#E0E0E0',
+        backgroundColor: '#e7eff6',
         alignItems: 'center',
         justifyContent: 'flex-end',
     },
@@ -121,10 +121,11 @@ const styles = StyleSheet.create({
     infoTitle: {
         position: 'absolute',
         top: 195,
-        left: 25
+        left: 25,
+        fontWeight: 'bold'
     },
     infoContainer: {
-        backgroundColor: '#B0B0B0',
+        backgroundColor: '#adcbe3',
         width: '90%',
         height: 320,
         borderRadius: 5,
@@ -153,10 +154,11 @@ const styles = StyleSheet.create({
     objectifTitle: {
         position: 'absolute',
         top: 550,
-        left: 25
+        left: 25,
+        fontWeight: 'bold'
     },
     objectifContainer : {
-        backgroundColor: '#B0B0B0',
+        backgroundColor: '#adcbe3',
         width: '90%',
         height: 50,
         borderRadius: 5,
@@ -182,7 +184,7 @@ const styles = StyleSheet.create({
         marginRight: 10,
     },
     editButton: {
-        backgroundColor: '#E0E0E0',
+        backgroundColor: '#4b86b4',
         width: 30,
         height: 30,
         borderRadius: 10,
@@ -191,14 +193,16 @@ const styles = StyleSheet.create({
     editIcon: {
         fontSize: 25,
         textAlign: 'center',
+        color: 'white'
     },
     notifTitle: {
         position: 'absolute',
         top: 635,
-        left: 25
+        left: 25,
+        fontWeight: 'bold'
     },
     notifContainer: {
-        backgroundColor: '#B0B0B0',
+        backgroundColor: '#adcbe3',
         width: '90%',
         height: 125,
         borderRadius: 5,
@@ -212,8 +216,8 @@ const styles = StyleSheet.create({
         marginBottom: 11,
         marginHorizontal: 50,
         top: 15,
-        borderColor: '#808080',
-        backgroundColor: 'white',
+        borderColor: '#4b86b4',
+        backgroundColor: '#4b86b4',
         borderWidth: 2,
         borderRadius: 20,
         height: 40
@@ -221,6 +225,8 @@ const styles = StyleSheet.create({
     appText: {
         flex: 1,
         fontSize: 19,
-        paddingLeft: 10
+        paddingLeft: 10,
+        color: 'white',
+        fontWeight: 'bold'
     }
 })

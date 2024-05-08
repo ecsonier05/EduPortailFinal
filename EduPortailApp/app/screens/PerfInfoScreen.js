@@ -11,6 +11,7 @@ export default function PerfInfoScreen(props) {
     const mode = route.params?.mode;
 
     let data = []
+    let pond = []
 
     if(mode == 'moy'){
         data=[ 
@@ -28,10 +29,16 @@ export default function PerfInfoScreen(props) {
             {value: 70, label: 'Test 1'},
             {value: 100, label: 'Devoir 4'}  
         ]
+
+        pond=[
+            {value: 40, text: '40%', color: '#177AD5'}, //Exams
+            {value: 25, text: '25%', color: '#79D2DE'}, //Tests
+            {value: 35, text: '35%', color: '#ED6665'}, //Homework
+        ]
     }
 
     return (
-        <View>
+        <View style={styles.mainContainer}>
             <Text style={styles.perfTitle}>Ma performance</Text>
 
             {mode == 'moy' ? (
@@ -43,6 +50,7 @@ export default function PerfInfoScreen(props) {
                             data = {data}
                             maxValue = {100}
                             spacing = {35}
+                            frontColor={'#4b86b4'}
                         />
                     </View>
 
@@ -63,6 +71,7 @@ export default function PerfInfoScreen(props) {
                             data = {data}
                             maxValue = {100}
                             spacing = {35}
+                            frontColor={'#4b86b4'}
                         />
                     </View>
 
@@ -74,9 +83,22 @@ export default function PerfInfoScreen(props) {
                     <View style={styles.pondMoyContainer}>
                         <View style={styles.boxPond}>
                             <PieChart 
-                                data = {data} 
                                 radius={80}
+                                showText
+                                textColor="black"
+                                data = {pond}  
                             />
+                            <Text style={{fontSize: 17, paddingTop: 5}}>
+                                <Text style={{color: '#177AD5'}}>■</Text><Text> Examen</Text>
+                                <Text style={{color: '#79D2DE'}}> ■</Text><Text> Test </Text>
+                                <Text style={{color: '#ED6665'}}>■</Text><Text> Devoir</Text>
+                            </Text>
+                            {/*add missing components*/}
+                            <Text style={{fontSize: 17}}>
+                                <Text>■ test4 </Text>
+                                <Text> ■ test5 </Text>
+                                <Text> ■ test6</Text>
+                            </Text>
                         </View>
                         <View style={styles.boxMoyenne}>
                             <Text style={styles.contTitle}>Moyenne generale</Text>
@@ -100,16 +122,18 @@ export default function PerfInfoScreen(props) {
 }
 
 const styles = StyleSheet.create({
+    mainContainer: {
+        height: '100%',
+        backgroundColor: '#e7eff6'
+    },
     perfTitle: {
         position: 'absolute',
         top: 5,
         left: '30%',
-        fontSize: 30
+        fontSize: 30,
     },
     container: {
-        flex: 1,
         alignItems: 'center',
-        justifyContent: 'flex-end',
     },
     sessionText:{
         position: 'absolute',
@@ -123,12 +147,13 @@ const styles = StyleSheet.create({
     },
     //For Moyenne Screen
     moyCheckContainer: {
-        backgroundColor: '#B0B0B0',
+        backgroundColor: '#adcbe3',
         position: 'absolute',
-        top: 350,
+        top: 325,
         width: '90%',
         height: 300,
         alignItems: 'center',
+        borderRadius: 5
     },
     goalLabel: {
         fontSize: 20,
@@ -149,13 +174,14 @@ const styles = StyleSheet.create({
     },
     //For Grade Screen
     progressContainer: {
-        backgroundColor: '#B0B0B0',
+        backgroundColor: '#adcbe3',
         position: 'absolute',
-        top: 350,
+        top: 325,
         width: '90%',
         height: 100,
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        borderRadius: 5
     },
     progressBarShell: {
         backgroundColor: 'white',
@@ -167,21 +193,21 @@ const styles = StyleSheet.create({
         position: 'absolute'
     },
     progressBar: {
-        backgroundColor: 'blue',
+        backgroundColor: '#4b86b4',
         borderRadius: 5,
         borderWidth: 2,
-        borderColor: 'blue',
+        borderColor: '#4b86b4',
         width: 150,
         height: 30,
         position: 'absolute',
-        left: 20
+        left: 18
     },
     //Ponderation
     pondMoyContainer: {
         width: '90%',
         height: 225,
         position: 'absolute',
-        top: 500,
+        top: 445,
         flexDirection: 'row',
         justifyContent: 'center',
     },
@@ -190,8 +216,8 @@ const styles = StyleSheet.create({
         width: '47%',
         marginRight: '6%',
         borderRadius: 5,
-        justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        paddingTop: 8
     },
     //Moyenne
     contTitle: {

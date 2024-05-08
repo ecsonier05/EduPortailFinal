@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Text, StyleSheet, View, ScrollView, TouchableOpacity} from 'react-native';
+import { Text, StyleSheet, View, ScrollView, TouchableOpacity, Alert} from 'react-native';
 import { useRoute } from "@react-navigation/native";
 import { Dropdown } from 'react-native-element-dropdown';
 
@@ -19,7 +19,8 @@ export default function EvalClassScreen(props) {
                     <Text style={styles.evalType}>Devoir 4</Text>
                     <Text style={styles.grade}>32/35 - 91.43%</Text>
                     <View style={styles.buttonContainer}>
-                        <TouchableOpacity style={styles.retroButton}>
+                        {/*add if condition for displaying button (disable and turn grey if empty)*/}
+                        <TouchableOpacity style={styles.retroButton} onPress={() => Alert.alert('Retroaction', 'test')}>
                             <Text style={styles.retroText}>Voir retroaction</Text>
                         </TouchableOpacity>
                     </View>
@@ -90,7 +91,7 @@ const styles = StyleSheet.create({
     //main Container
     container: {
         flex: 1,
-        backgroundColor: '#E0E0E0',
+        backgroundColor: '#e7eff6',
         alignItems: 'center',
         justifyContent: 'flex-end',
     },
@@ -138,8 +139,8 @@ const styles = StyleSheet.create({
     },
     testListItems: {
         flexDirection: 'row',
-        backgroundColor: '#E0E0E0',
-        borderColor: 'grey',
+        backgroundColor: '#adcbe3',
+        borderColor: '#2a4d69',
         height: 40,
         borderRadius: 5,
         borderWidth: 2,

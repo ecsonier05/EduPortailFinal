@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
     //main Container
     container: {
         flex: 1,
-        backgroundColor: '#E0E0E0',
+        backgroundColor: '#e7eff6',
         alignItems: 'center',
         justifyContent: 'flex-end',
     },
@@ -85,20 +85,22 @@ const styles = StyleSheet.create({
     },
     classButton: {
         flexDirection: 'row',
-        backgroundColor: '#70bbff',
+        backgroundColor: '#4b86b4',
         height: 70,
         alignItems: 'center',
-        borderWidth: 2,
         borderRadius: 5,
-        borderColor: '#3d88ec'
     },
     sigleText: {
         flex: 1,
         marginLeft: 25,
         fontSize: 20,
+        fontWeight: 'bold',
+        color: 'white'
     },
     classText: {
         flex: 2,
         marginRight: 25,
+        fontWeight: 'bold',
+        color: 'white'
     },
 })

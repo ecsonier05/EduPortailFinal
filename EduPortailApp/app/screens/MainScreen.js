@@ -78,7 +78,6 @@ export default function MainScreen({ navigation }) {
                 <Text style={styles.contTitle}>Notes d'évaluation récentes</Text>
                 {renderEvals()}
 
-                {/*Add function to pressable*/}
                 <TouchableOpacity style={styles.evalButton} onPress={() => navigation.navigate('Évaluations')}>
                         <Text style={styles.evalBtnText}>Voir Plus</Text>
                 </TouchableOpacity>
