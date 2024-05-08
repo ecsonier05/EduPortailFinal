@@ -6,12 +6,15 @@
 
         $matricule = mysqli_real_escape_string($conn, $_GET['matricule']);
     
-        $sql = "SELECT prenom, nom, nomUtilisateur, matricule, titreProgramme, courrielEtudiant, dureeAnnee
-        FROM etudiants
-        INNER JOIN campus_programmes
-        INNER JOIN programmes
-        WHERE matricule = '$matricule'
-        AND campus_programmes_programmes_idProgramme = idProgramme";
+        $sql = "SELECT datePublication, notePointage, notePourcentage, retroaction, nomEvaluation, ponderation, pointage
+        FROM evaluations_etudiants 
+        INNER JOIN evaluations
+        ON Evaluations_idEvaluation = idEvaluation
+        INNER JOIN inscriptions
+        ON Inscriptions_idInscription = idInscription
+        WHERE Etudiant_matricule = '$matricule'
+        AND publier = '1'
+        ORDER BY datePublication DESC";
     
         $result = mysqli_query($conn, $sql);
     
@@ -19,6 +22,8 @@
             echo mysqli_error($conn);
             exit;
         }
+        
+        $data;
 
         while($row = mysqli_fetch_assoc($result)){
             $data = $row;

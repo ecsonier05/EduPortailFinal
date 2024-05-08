@@ -6,15 +6,14 @@
 
         $matricule = mysqli_real_escape_string($conn, $_GET['matricule']);
     
-        $sql = "SELECT prenom, nom, nomUtilisateur, matricule, titreProgramme, courrielEtudiant, dureeAnnee
-        FROM etudiants
-        INNER JOIN campus_programmes
-        INNER JOIN programmes
-        WHERE matricule = '$matricule'
-        AND campus_programmes_programmes_idProgramme = idProgramme";
+        $sql = "SELECT sigle, titreCours
+        FROM inscriptions
+        INNER JOIN cours_livres ON Cours_Livres_idCours_Livre = idCours_Livre
+        INNER JOIN cours ON Cours_sigle = sigle
+        WHERE etudiant_matricule = '$matricule'";
     
         $result = mysqli_query($conn, $sql);
-    
+
         if(!$result){
             echo mysqli_error($conn);
             exit;
