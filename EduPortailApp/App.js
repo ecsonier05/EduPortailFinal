@@ -16,6 +16,8 @@ export default function App() {
         <Stack.Screen name="Nav" component={NavScreen} />
         <Stack.Screen name="Create" component={CreateScreen} options={{headerShown: true, headerTitle: 'Création de compte'}} />
         <Stack.Screen name="Forgot" component={ForgotPwScreen} options={{headerShown: true, headerTitle: 'Mot de passe oublié'}} />
+        <Stack.Screen name="EvalClass" component={EvalClassScreen} options={{headerShown: true, headerTitle: ''}} />
+        <Stack.Screen name="PerfInfo" component={PerfInfoScreen} options={{headerShown: true, headerTitle: ''}} />
       </Stack.Navigator>
     </NavigationContainer>
   );
