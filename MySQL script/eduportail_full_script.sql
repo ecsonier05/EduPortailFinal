@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1:3308
--- Generation Time: May 06, 2024 at 06:41 PM
--- Server version: 8.2.0
--- PHP Version: 8.2.13
+-- Host: 127.0.0.1:3306
+-- Generation Time: May 08, 2024 at 01:19 AM
+-- Server version: 8.3.0
+-- PHP Version: 8.2.18
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -453,6 +453,7 @@ CREATE TABLE IF NOT EXISTS `evaluations_etudiants` (
   `notePointage` int NOT NULL,
   `notePourcentage` decimal(5,2) NOT NULL,
   `Statut_Evaluation_idStatut` int NOT NULL,
+  `retroaction` varchar(80) COLLATE utf8mb4_bin DEFAULT NULL,
   PRIMARY KEY (`idEvaluation_Etudiant`),
   KEY `fk_Inscriptions_has_Evaluation_Evaluation1_idx` (`Evaluations_idEvaluation`),
   KEY `fk_Inscriptions_has_Evaluation_Inscriptions1_idx` (`Inscriptions_idInscription`),
@@ -463,22 +464,22 @@ CREATE TABLE IF NOT EXISTS `evaluations_etudiants` (
 -- Dumping data for table `evaluations_etudiants`
 --
 
-INSERT INTO `evaluations_etudiants` (`idEvaluation_Etudiant`, `Inscriptions_idInscription`, `Evaluations_idEvaluation`, `datePublication`, `publier`, `notePointage`, `notePourcentage`, `Statut_Evaluation_idStatut`) VALUES
-(1, 1, 1, '2024-04-09', 1, 4, 80.00, 1),
-(2, 1, 2, '2024-04-17', 1, 18, 90.00, 1),
-(3, 1, 3, '2024-05-02', 1, 14, 93.33, 1),
-(4, 1, 4, '2024-05-10', 0, 37, 91.25, 1),
-(5, 1, 5, '2024-05-17', 0, 34, 83.75, 1),
-(6, 2, 11, '2024-05-08', 1, 30, 100.00, 1),
-(7, 2, 15, '2024-05-10', 1, 23, 75.00, 1),
-(8, 2, 16, '2024-04-11', 1, 4, 80.00, 1),
-(9, 2, 17, '2024-05-17', 0, 9, 87.50, 1),
-(10, 3, 6, '2024-04-19', 1, 31, 76.25, 1),
-(11, 3, 7, '2024-05-18', 0, 24, 58.75, 2),
-(12, 3, 8, '2024-04-24', 1, 35, 86.88, 1),
-(13, 3, 9, '2024-05-13', 0, 27, 67.50, 1),
-(14, 3, 10, '2024-04-17', 1, 10, 95.00, 1),
-(15, 3, 8, '2024-05-18', 0, 0, 0.00, 2);
+INSERT INTO `evaluations_etudiants` (`idEvaluation_Etudiant`, `Inscriptions_idInscription`, `Evaluations_idEvaluation`, `datePublication`, `publier`, `notePointage`, `notePourcentage`, `Statut_Evaluation_idStatut`, `retroaction`) VALUES
+(1, 1, 1, '2024-04-09', 1, 4, 80.00, 1, NULL),
+(2, 1, 2, '2024-04-17', 1, 18, 90.00, 1, 'Excellent! Assures-toi de réviser la syntaxe.'),
+(3, 1, 3, '2024-05-02', 1, 14, 93.33, 1, 'Excellent!'),
+(4, 1, 4, '2024-05-10', 0, 37, 91.25, 1, NULL),
+(5, 1, 5, '2024-05-17', 0, 34, 83.75, 1, NULL),
+(6, 2, 11, '2024-05-08', 1, 30, 100.00, 1, 'Très belle présentation. Belle élocution et très bonne recherche du sujet: DevOp'),
+(7, 2, 15, '2024-05-10', 1, 23, 75.00, 1, NULL),
+(8, 2, 16, '2024-04-11', 1, 4, 80.00, 1, NULL),
+(9, 2, 17, '2024-05-17', 0, 9, 87.50, 1, NULL),
+(10, 3, 6, '2024-04-19', 1, 31, 76.25, 1, 'Ne pas oublier d\'inclure le fichier ressources.'),
+(11, 3, 7, '2024-05-18', 0, 24, 58.75, 2, 'Point à réviser: les options de stockage'),
+(12, 3, 8, '2024-04-24', 1, 35, 86.88, 1, 'Bravo!'),
+(13, 3, 9, '2024-05-13', 0, 27, 67.50, 1, NULL),
+(14, 3, 10, '2024-04-17', 1, 10, 95.00, 1, NULL),
+(15, 3, 8, '2024-05-18', 0, 0, 0.00, 2, 'Ne pas oublier d\'ajouter tous les options de navigation.');
 
 -- --------------------------------------------------------
 
