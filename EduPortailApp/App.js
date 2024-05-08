@@ -5,6 +5,8 @@ import NavScreen from './app/screens/NavScreen';
 import LoginScreen from './app/screens/LoginScreen';
 import CreateScreen from './app/screens/CreateScreen';
 import ForgotPwScreen from './app/screens/ForgotPwScreen';
+import EvalClassScreen from './app/screens/EvalClassScreen';
+import PerfInfoScreen from './app/screens/PerfInfoScreen';
 
 const Stack = createNativeStackNavigator();
 
