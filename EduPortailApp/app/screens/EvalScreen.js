@@ -1,11 +1,31 @@
 import React from 'react';
 import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 
-export default function EvalScreen(props) {
+export default function EvalScreen({ navigation }) {
+
+    const renderButtons = () => {
+
+        const buttonItems = [];
+
+        for (let i = 0; i < 3; i++) {
+            buttonItems.push(
+                <View style={styles.classRow} key={i}>
+                    <TouchableOpacity style={styles.classButton} onPress={() => navigation.navigate('EvalClass', {id: "45b"})}>
+                        <Text style={styles.sigleText}>PROG1297</Text>
+                        <Text style={styles.classText}>Programmation Web PHP et Ajax</Text>
+                    </TouchableOpacity>
+                </View>
+            );
+        }
+
+        return buttonItems;
+    }
+
     return (
         <View style={styles.container}>
             <Text style={styles.evalTitle}>Mes évaluations</Text>
 
+            {/*use api to display session*/}
             <Text style={styles.evalSessionText}>Session actuelle: Printemps 2024</Text>
 
             <View style={styles.classLabels}>
@@ -13,25 +33,7 @@ export default function EvalScreen(props) {
                 <Text style={styles.titleLabel}>Titre du cour</Text>
             </View>
             <View style={styles.classContainer}>
-                {/*Loop here for classes*/}
-                <View style={styles.classRow}>
-                    <TouchableOpacity style={styles.classButton}>
-                        <Text style={styles.sigleText}>PROG1297</Text>
-                        <Text style={styles.classText}>Programmation Web PHP et Ajax</Text>
-                    </TouchableOpacity>
-                </View>
-                <View style={styles.classRow}>
-                    <TouchableOpacity style={styles.classButton}>
-                        <Text style={styles.sigleText}>PROG1301</Text>
-                        <Text style={styles.classText}>Projet de developpement d'applications informatiques</Text>
-                    </TouchableOpacity>
-                </View>
-                <View style={styles.classRow}>
-                    <TouchableOpacity style={styles.classButton}>
-                        <Text style={styles.sigleText}>PROG1342</Text>
-                        <Text style={styles.classText}>Developpement d'applications mobiles multiplateformes</Text>
-                    </TouchableOpacity>
-                </View>
+                {renderButtons()}
             </View>
         </View>
     );
@@ -41,7 +43,7 @@ const styles = StyleSheet.create({
     //main Container
     container: {
         flex: 1,
-        backgroundColor: '#E0E0E0',
+        backgroundColor: '#e7eff6',
         alignItems: 'center',
         justifyContent: 'flex-end',
     },
@@ -83,20 +85,22 @@ const styles = StyleSheet.create({
     },
     classButton: {
         flexDirection: 'row',
-        backgroundColor: '#70bbff',
+        backgroundColor: '#4b86b4',
         height: 70,
         alignItems: 'center',
-        borderWidth: 2,
         borderRadius: 5,
-        borderColor: '#3d88ec'
     },
     sigleText: {
         flex: 1,
         marginLeft: 25,
         fontSize: 20,
+        fontWeight: 'bold',
+        color: 'white'
     },
     classText: {
         flex: 2,
         marginRight: 25,
+        fontWeight: 'bold',
+        color: 'white'
     },
 })

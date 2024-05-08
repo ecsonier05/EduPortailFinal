@@ -1,13 +1,39 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
 import { RadioButton } from 'react-native-paper';
 
-function PerfScreen(props) {
+function PerfScreen({ navigation }) {
+
+    let table = ["un", "deux", "trois"]; 
 
     //Radio Buttons
-    const [courChecked, setCourChecked] = React.useState('first');
-    const [resultChecked, setResultChecked] = React.useState('first');
+    const [courChecked, setCourChecked] = React.useState('un');
+    const [resultChecked, setResultChecked] = React.useState('moy');
+
+    const renderRadio = () => {
+
+        const radioItems = [];
+
+        for (let i = 0; i < 3; i++) {
+            radioItems.push(
+                <View style={styles.checkContainer} key={i}>
+                    <View style={styles.checkContent}>
+                        <RadioButton 
+                            value="first"
+                            status={ courChecked === table[i] ? 'checked' : 'unchecked' }
+                            onPress={() => setCourChecked(table[i])}
+                            color="#3d88ec"
+                        />
+                        <Text style={styles.titleContent}>PROG1297</Text>
+                    </View>
+                    <Text style={styles.descContent}>Programmation Web PHP et Ajax</Text>
+                </View>
+            );
+        }
+
+        return radioItems;
+    }
 
     //Drop Down List
     const data = [
@@ -19,17 +45,6 @@ function PerfScreen(props) {
 
     const [value, setValue] = useState(null);
     const [isFocus, setIsFocus] = useState(false);
-
-    const renderLabel = () => {
-      if (value || isFocus) {
-        return (
-          <Text style={[styles.label, isFocus && { color: 'blue' }]}>
-            Dropdown label
-          </Text>
-        );
-      }
-      return null;
-    };
 
     return (
         <View style={styles.container}>
@@ -62,72 +77,44 @@ function PerfScreen(props) {
                 {/*rework with radiobutton.item*/}
                 <RadioButton.Group onValueChange={resultChecked => setResultChecked(resultChecked)} value={resultChecked}>
                     <RadioButton.Item 
-                        label="Moyenne generale" 
-                        value="first" 
-                        color="#3d88ec"
-                        uncheckedColor="#3d88ec"
+                        label="Moyenne generale"
+                        value="moy" 
+                        color="white"
+                        uncheckedColor="white"
                         style={styles.resultRadioButtons}
-                        
+                        labelStyle={{
+                            color: 'white',
+                            fontWeight: 'bold',
+                            fontSize: 20
+                        }}
                     />
                     <RadioButton.Item 
                         label="Note d'evaluation" 
-                        value="second"
-                        color="#3d88ec"
-                        uncheckedColor="#3d88ec"
-                        style={styles.resultRadioButtons} 
+                        value="note"
+                        color="white"
+                        uncheckedColor="white"
+                        style={styles.resultRadioButtons}
+                        labelStyle={{
+                            color: 'white',
+                            fontWeight: 'bold',
+                            fontSize: 20  
+                        }}
                     />
                 </RadioButton.Group>
 
             </View>
+
+            {resultChecked != 'moy' ?(
             <View style={styles.coursContainer}>
                 <Text style={styles.contLabel}>Cours</Text>
-
-                <View style={styles.checkRow}>
-                    {/*loop for render*/}
-                    <View style={styles.checkContainer}>
-                        <View style={styles.checkContent}>
-                            <RadioButton 
-                                value="first"
-                                status={ courChecked === 'first' ? 'checked' : 'unchecked' }
-                                onPress={() => setCourChecked('first')}
-                                color="#3d88ec"
-                            />
-                            <Text style={styles.titleContent}>PROG1297</Text>
-                        </View>
-
-                        <Text style={styles.descContent}>Programmation Web PHP et Ajax</Text>
-                    </View>
-
-                    <View style={styles.checkContainer}>
-                        <View style={styles.checkContent}>
-                            <RadioButton 
-                                value="second"
-                                status={ courChecked === 'second' ? 'checked' : 'unchecked' }
-                                onPress={() => setCourChecked('second')}
-                                color="#3d88ec"
-                            />
-                            <Text style={styles.titleContent}>PROG1297</Text>
-                        </View>
-
-                        <Text style={styles.descContent}>Programmation Web PHP et Ajax</Text>
-                    </View>
-
-                    <View style={styles.checkContainer}>
-                        <View style={styles.checkContent}>
-                            <RadioButton 
-                                value="third"
-                                status={ courChecked === 'third' ? 'checked' : 'unchecked' }
-                                onPress={() => setCourChecked('third')}
-                                color="#3d88ec"
-                            />
-                            <Text style={styles.titleContent}>PROG1297</Text>
-                        </View>
-
-                        <Text style={styles.descContent}>Programmation Web PHP et Ajax</Text>
-                    </View>
-                </View>
+                <ScrollView horizontal>
+                    {renderRadio()}        
+                </ScrollView>
             </View>
-            <TouchableOpacity style={styles.submitButton}>
+            ) : (
+            <View style={styles.coursContainer}></View>    
+            )}
+            <TouchableOpacity style={styles.submitButton} onPress={() => navigation.navigate('PerfInfo', {id: courChecked, mode: resultChecked})}>
                 <Text style={styles.submitText}>OK</Text>
             </TouchableOpacity>
         </View>
@@ -137,7 +124,7 @@ function PerfScreen(props) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#E0E0E0',
+        backgroundColor: '#e7eff6',
         alignItems: 'center',
         justifyContent: 'flex-end',
     },
@@ -163,7 +150,7 @@ const styles = StyleSheet.create({
         marginTop: 5,
     },
     sessionContainer: {
-        backgroundColor: '#B0B0B0',
+        backgroundColor: '#adcbe3',
         width: '90%',
         height: 220,
         borderRadius: 5,
@@ -192,19 +179,17 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
     resultContainer: {
-        backgroundColor: '#B0B0B0',
+        backgroundColor: '#adcbe3',
         width: '90%',
-        height: 140,
+        height: 130,
         borderRadius: 5,
         position: 'absolute',
-        top: 400,
+        top: 395,
     },
     resultRadioButtons: {
         marginVertical: 0.5,
         borderRadius: 5,
-        borderWidth: 2,
-        borderColor: '#3d88ec',
-        backgroundColor: '#77b7f3',
+        backgroundColor: '#4b86b4',
     },
     buttonText: {
         fontSize: 20,
@@ -212,16 +197,12 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     coursContainer: {
-        backgroundColor: '#B0B0B0',
+        backgroundColor: '#adcbe3',
         width: '90%',
-        height: 150,
+        height: 110,
         borderRadius: 5,
         position: 'absolute',
-        top: 550,
-    },
-    checkRow:{
-        flexDirection: 'row',
-        marginTop: 10,
+        top: 530,
     },
     checkContainer: {
         marginLeft: 5
@@ -240,14 +221,14 @@ const styles = StyleSheet.create({
         fontSize: 10,
     },
     submitButton: {
-        backgroundColor: '#3d88ec',
+        backgroundColor: '#2a4d69',
         width: '90%',
         height: 40,
         borderRadius: 5,
         alignItems: 'center',
         justifyContent: 'center',
         position: 'absolute',
-        top: 710,
+        top: 645,
     },
     submitText: {
         color: 'white',
