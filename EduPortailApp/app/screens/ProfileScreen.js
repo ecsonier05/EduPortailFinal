@@ -4,27 +4,37 @@ import BouncyCheckbox from "react-native-bouncy-checkbox";
 
 export default function ProfileScreen(props) {
 
-    const [data, setData] = useState(null);
+    const [etudiantData, setEtudiantData] = useState(null);
+    const [programmeData, setProgrammeData] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    const matricule = 2051798;
-    // const url = `https://eduportail-69af4de32dad.herokuapp.com/api/etudiants/${matricule}`;
+    const matriculeVar = 2051798;
 
-    const url = `http://192.168.56.1:3000/api/etudiants/2051798`;
+    // Lien BD remote
+    // const url= `https://eduportail-69af4de32dad.herokuapp.com/api/etudiants/${matricule}`;
+
+    // Liens BD locale
+    const urlEtudiant = `http://192.168.56.1:3000/api/etudiants/${matriculeVar}`;
+    const urlProgramme = `http://192.168.56.1:3000/api/programmes/${matriculeVar}`;
     // Pour trouver l'adresse ip de votre machine, cmd: ipconfig (choisir IPv4 Address sous Connection-specific DNS suffix)
 
     useEffect(() => {
-        fetch(url)
-          .then((resp) => {
-              if (!resp.ok) {
-                  throw new Error('Network response was not ok');
-              }
-              return resp.json();
-          })
-          .then((json) => setData(json))
-          .catch((error) => console.error('Error fetching data:', error))
-          .finally(() => setLoading(false));
+        fetchData(urlEtudiant, setEtudiantData);
+        fetchData(urlProgramme, setProgrammeData);
     }, []);
+
+    const fetchData = (url, setData) => {
+        fetch(url)
+            .then((resp) => {
+                if (!resp.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return resp.json();
+            })
+            .then((json) => setData(json))
+            .catch((error) => console.error('Error fetching data:', error))
+            .finally(() => setLoading(false));
+    };
 
     return (
         <View style={styles.container}>
@@ -44,15 +54,15 @@ export default function ProfileScreen(props) {
                     <View style={styles.infoContainer}>
                         <View style={styles.tfContainer}>
                             <Text style={styles.fieldText}>Prénom</Text>
-                            <TextInput style={styles.fieldInput} editable={false} placeholder={data.prenom} />
+                            <TextInput style={styles.fieldInput} editable={false} placeholder={etudiantData.prenom} />
                         </View>
                         <View style={styles.tfContainer}>
                             <Text style={styles.fieldText}>Nom</Text>
-                            <TextInput style={styles.fieldInput} editable={false} placeholder={data.nom} />
+                            <TextInput style={styles.fieldInput} editable={false} placeholder={etudiantData.nom} />
                         </View>
                         <View style={styles.tfContainer}>
                             <Text style={styles.fieldText}>Nom d`utilisateur</Text>
-                            <TextInput style={styles.fieldInput} editable={false} placeholder={data.nomUtilisateur} />
+                            <TextInput style={styles.fieldInput} editable={false} placeholder={etudiantData.nomUtilisateur} />
                         </View>
                         <View style={styles.tfContainer}>
                             <Text style={styles.fieldText}>Matricule</Text>
@@ -64,7 +74,7 @@ export default function ProfileScreen(props) {
                         </View>
                         <View style={styles.tfContainer}>
                             <Text style={styles.fieldText}>Courriel</Text>
-                            <TextInput style={styles.fieldInput} editable={false} placeholder={data.courrielEtudiant} />
+                            <TextInput style={styles.fieldInput} editable={false} placeholder={etudiantData.courrielEtudiant} />
                         </View>
                         <View style={styles.tfContainer}>
                             <Text style={styles.fieldText}>Année d`étude</Text>
