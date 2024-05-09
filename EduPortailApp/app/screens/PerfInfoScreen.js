@@ -10,6 +10,9 @@ export default function PerfInfoScreen(props) {
     const id = route.params?.id;
     const mode = route.params?.mode;
 
+    const desired = 80.00;
+    const obtained = 85.72;
+
     let data = []
     let pond = []
 
@@ -56,10 +59,26 @@ export default function PerfInfoScreen(props) {
 
                     <View style={styles.moyCheckContainer}>
                         <Text style={styles.goalLabel}>Moyenne generale souhaitee: </Text>
-                        <Text style={styles.goalText}>80%</Text>
+                        <Text style={styles.goalText}>{desired}</Text>
 
                         <Text style={styles.currentLabel}>Moyenne generale obtenu(session H2023): </Text>
-                        <Text style={styles.currentText}>85.72%</Text>
+                        <Text style={styles.currentText}>{obtained}</Text>
+
+                        {desired < obtained ? (
+                            <View style={styles.desiredResultContainer}>
+                                {/*add variable for session*/}
+                                <Text style={styles.desiredResultText}>
+                                    Bravo! Vous avez atteint votre objectif{"\n"}pour la session Hiver 2023!
+                                </Text>
+                            </View>
+                        ) : (
+                            <View style={styles.desiredResultContainer}>
+                                <Text style={styles.desiredResultText}>
+                                    {/*make text less like a kick to the balls and more encouraging to do better*/}
+                                    votre objectif na pas été atteint
+                                </Text>
+                            </View>
+                        )}
                     </View>
                 </View>
             ) : (
@@ -151,7 +170,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         top: 325,
         width: '90%',
-        height: 300,
+        height: 250,
         alignItems: 'center',
         borderRadius: 5
     },
@@ -171,6 +190,20 @@ const styles = StyleSheet.create({
     currentText: {
         fontSize: 30,
         color: 'lime',
+    },
+    desiredResultContainer: {
+        backgroundColor: 'white',
+        marginTop: 10,
+        width: '90%',
+        height: '35%',
+        borderRadius: 5,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    desiredResultText: {
+        textAlign: 'center',
+        fontSize: 20,
+        fontWeight: 'bold'
     },
     //For Grade Screen
     progressContainer: {
