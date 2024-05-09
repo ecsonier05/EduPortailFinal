@@ -9,15 +9,20 @@ export default function ProfileScreen(props) {
 
     const matricule = 2051798;
     //const url = `https://eduportail-69af4de32dad.herokuapp.com/api/etudiants/${matricule}`;
-    const url = `http://10.50.0.107/api/etudiants/${matricule}`;
+    const url = `http://localhost/api/etudiants/${matricule}`;
 
     useEffect(() => {
         fetch(url)
-          .then((resp) => resp.json())
+          .then((resp) => {
+              if (!resp.ok) {
+                  throw new Error('Network response was not ok');
+              }
+              return resp.json();
+          })
           .then((json) => setData(json))
-          .catch((error) => console.error(error))
+          .catch((error) => console.error('Error fetching data:', error))
           .finally(() => setLoading(false));
-      });
+    }, []);
 
     return (
         <View style={styles.container}>
@@ -37,11 +42,11 @@ export default function ProfileScreen(props) {
                     <View style={styles.infoContainer}>
                         <View style={styles.tfContainer}>
                             <Text style={styles.fieldText}>Prénom</Text>
-                            <TextInput style={styles.fieldInput} editable={false} value={data.prenom} />
+                            <TextInput style={styles.fieldInput} editable={false} placeholder={"temp"} />
                         </View>
                         <View style={styles.tfContainer}>
                             <Text style={styles.fieldText}>Nom</Text>
-                            <TextInput style={styles.fieldInput} editable={false} placeholder={"Doe"} />
+                            <TextInput style={styles.fieldInput} editable={false} placeholder={data.nom} />
                         </View>
                         <View style={styles.tfContainer}>
                             <Text style={styles.fieldText}>Nom d`utilisateur</Text>
