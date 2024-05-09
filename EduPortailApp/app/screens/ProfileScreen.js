@@ -8,8 +8,10 @@ export default function ProfileScreen(props) {
     const [loading, setLoading] = useState(true);
 
     const matricule = 2051798;
-    //const url = `https://eduportail-69af4de32dad.herokuapp.com/api/etudiants/${matricule}`;
+    // const url = `https://eduportail-69af4de32dad.herokuapp.com/api/etudiants/${matricule}`;
+
     const url = `http://192.168.56.1:3000/api/etudiants/2051798`;
+    // Pour trouver l'adresse ip de votre machine, cmd: ipconfig (choisir IPv4 Address sous Connection-specific DNS suffix)
 
     useEffect(() => {
         fetch(url)
@@ -54,7 +56,7 @@ export default function ProfileScreen(props) {
                         </View>
                         <View style={styles.tfContainer}>
                             <Text style={styles.fieldText}>Matricule</Text>
-                            <TextInput style={styles.fieldInput} editable={false} placeholder={"temp"} />
+                            <TextInput style={styles.fieldInput} editable={false} placeholder={"tem"} />
                         </View>
                         <View style={styles.tfContainer}>
                             <Text style={styles.fieldText}>Programme</Text>
