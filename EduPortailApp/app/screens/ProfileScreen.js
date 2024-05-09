@@ -10,16 +10,10 @@ export default function ProfileScreen(props) {
     const matricule = 2051798;
     // const url = `https://eduportail-69af4de32dad.herokuapp.com/api/etudiants/${matricule}`;
 
-    const urlEtudiants = `http://192.168.56.1:3000/api/etudiants/2051798`;
-    const urlProgrammes = `http://192.168.56.1:3000/api/programmes/2051798`;
+    const url = `http://192.168.56.1:3000/api/etudiants/2051798`;
     // Pour trouver l'adresse ip de votre machine, cmd: ipconfig (choisir IPv4 Address sous Connection-specific DNS suffix)
 
     useEffect(() => {
-        fetchData(urlEtudiants);
-        fetchData(urlProgrammes);
-    }, []);
-
-    const fetchData = (url) => {
         fetch(url)
           .then((resp) => {
               if (!resp.ok) {
@@ -27,15 +21,10 @@ export default function ProfileScreen(props) {
               }
               return resp.json();
           })
-          .then((json) => {
-              setData(prevData => ({
-                  ...prevData,
-                  [url]: json
-              }));
-          })
+          .then((json) => setData(json))
           .catch((error) => console.error('Error fetching data:', error))
           .finally(() => setLoading(false));
-    };
+    }, []);
 
     return (
         <View style={styles.container}>
@@ -71,7 +60,7 @@ export default function ProfileScreen(props) {
                         </View>
                         <View style={styles.tfContainer}>
                             <Text style={styles.fieldText}>Programme</Text>
-                            <TextInput style={styles.fieldInput} editable={false} placeholder={data.titreProgramme} />
+                            <TextInput style={styles.fieldInput} editable={false} placeholder={"Programmation et applications mobiles"} />
                         </View>
                         <View style={styles.tfContainer}>
                             <Text style={styles.fieldText}>Courriel</Text>
