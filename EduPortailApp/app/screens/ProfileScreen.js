@@ -8,7 +8,8 @@ export default function ProfileScreen(props) {
     const [loading, setLoading] = useState(true);
 
     const matricule = 2051798;
-    const url = `https://eduportail-69af4de32dad.herokuapp.com/api/etudiants/${matricule}`;
+    //const url = `https://eduportail-69af4de32dad.herokuapp.com/api/etudiants/${matricule}`;
+    const url = `http://localhost:3000/api/etudiants/${matricule}`;
 
     useEffect(() => {
         fetch(url)
@@ -36,14 +37,14 @@ export default function ProfileScreen(props) {
                     <View style={styles.infoContainer}>
                         <View style={styles.tfContainer}>
                             <Text style={styles.fieldText}>Prénom</Text>
-                            <TextInput style={styles.fieldInput} editable={false} placeholder={"temp"} />
+                            <TextInput style={styles.fieldInput} editable={false} value={data.prenom} />
                         </View>
                         <View style={styles.tfContainer}>
                             <Text style={styles.fieldText}>Nom</Text>
                             <TextInput style={styles.fieldInput} editable={false} placeholder={"Doe"} />
                         </View>
                         <View style={styles.tfContainer}>
-                            <Text style={styles.fieldText}>Nom d'utilisateur</Text>
+                            <Text style={styles.fieldText}>Nom d`utilisateur</Text>
                             <TextInput style={styles.fieldInput} editable={false} placeholder={"ejdoe03"} />
                         </View>
                         <View style={styles.tfContainer}>
@@ -59,7 +60,7 @@ export default function ProfileScreen(props) {
                             <TextInput style={styles.fieldInput} editable={false} placeholder={"ejdoe@monccnb.ca"} />
                         </View>
                         <View style={styles.tfContainer}>
-                            <Text style={styles.fieldText}>Année d'étude</Text>
+                            <Text style={styles.fieldText}>Année d`étude</Text>
                             <TextInput style={styles.fieldInput} editable={false} placeholder={"2"} />
                         </View>
                     </View>
