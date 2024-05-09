@@ -66,11 +66,11 @@ export default function ProfileScreen(props) {
                         </View>
                         <View style={styles.tfContainer}>
                             <Text style={styles.fieldText}>Matricule</Text>
-                            <TextInput style={styles.fieldInput} editable={false} placeholder={"tem"} />
+                            <TextInput style={styles.fieldInput} editable={false} placeholder={etudiantData.matricule} />
                         </View>
                         <View style={styles.tfContainer}>
                             <Text style={styles.fieldText}>Programme</Text>
-                            <TextInput style={styles.fieldInput} editable={false} placeholder={"Programmation et applications mobiles"} />
+                            <TextInput style={styles.fieldInput} editable={false} placeholder={programmeData.titreProgramme} />
                         </View>
                         <View style={styles.tfContainer}>
                             <Text style={styles.fieldText}>Courriel</Text>
@@ -78,7 +78,7 @@ export default function ProfileScreen(props) {
                         </View>
                         <View style={styles.tfContainer}>
                             <Text style={styles.fieldText}>Année d`étude</Text>
-                            <TextInput style={styles.fieldInput} editable={false} placeholder={"2"} />
+                            <TextInput style={styles.fieldInput} editable={false} placeholder={"temp"} />
                         </View>
                     </View>
 
