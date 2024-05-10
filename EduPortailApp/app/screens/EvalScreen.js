@@ -1,7 +1,22 @@
-import React from 'react';
-import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Text, View, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
 
 export default function EvalScreen({ navigation }) {
+
+    const matricule = 2051798;
+    // const url = `https://eduportail-69af4de32dad.herokuapp.com/api/etudiants/${matricule}`;
+    const url = `http://10.0.2.2/API/EduPortail/getCours.php?matricule=${matricule}`;
+
+    const [data, setData] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        fetch(url)
+          .then((resp) => resp.json())
+          .then((json) => setData(json))
+          .catch((error) => console.error(error))
+          .finally(() => setLoading(false));
+      });
 
     const renderButtons = () => {
 
@@ -11,8 +26,8 @@ export default function EvalScreen({ navigation }) {
             buttonItems.push(
                 <View style={styles.classRow} key={i}>
                     <TouchableOpacity style={styles.classButton} onPress={() => navigation.navigate('EvalClass', {id: "45b"})}>
-                        <Text style={styles.sigleText}>PROG1297</Text>
-                        <Text style={styles.classText}>Programmation Web PHP et Ajax</Text>
+                        <Text style={styles.sigleText}>{data[i].sigle}</Text>
+                        <Text style={styles.classText}>{data[i].titreCours}</Text>
                     </TouchableOpacity>
                 </View>
             );
@@ -23,18 +38,24 @@ export default function EvalScreen({ navigation }) {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.evalTitle}>Mes évaluations</Text>
+            {loading ? (
+                <ActivityIndicator />
+            ) : (
+                <View style={styles.container}>
+                    <Text style={styles.evalTitle}>Mes évaluations</Text>
 
-            {/*use api to display session*/}
-            <Text style={styles.evalSessionText}>Session actuelle: Printemps 2024</Text>
+                    {/*use api to display session*/}
+                    <Text style={styles.evalSessionText}>Session actuelle: Printemps 2024</Text>
 
-            <View style={styles.classLabels}>
-                <Text style={styles.sigleLabel}>Sigle</Text>
-                <Text style={styles.titleLabel}>Titre du cour</Text>
-            </View>
-            <View style={styles.classContainer}>
-                {renderButtons()}
-            </View>
+                    <View style={styles.classLabels}>
+                        <Text style={styles.sigleLabel}>Sigle</Text>
+                        <Text style={styles.titleLabel}>Titre du cour</Text>
+                    </View>
+                    <View style={styles.classContainer}>
+                        {renderButtons()}
+                    </View>
+                </View>
+            )}
         </View>
     );
 }
@@ -92,7 +113,7 @@ const styles = StyleSheet.create({
     },
     sigleText: {
         flex: 1,
-        marginLeft: 25,
+        marginLeft: 10,
         fontSize: 20,
         fontWeight: 'bold',
         color: 'white'
