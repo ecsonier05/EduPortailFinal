@@ -107,7 +107,7 @@ export default function ProfileScreen(props) {
 
                     <Text style={styles.objectifTitle}>Objectif</Text>
                     <View style={styles.objectifContainer}>
-                        <Text style={styles.goalTitle}>Moyenne générale souhaitée</Text>
+                        <Text style={styles.fieldText}>Moyenne générale souhaitée</Text>
                         <KeyboardAwareScrollView contentContainerStyle={styles.scrollContainer}>
                             <TextInput
                                 style={styles.goalContainer}
@@ -197,11 +197,13 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         borderRadius: 5,
         width: 230,
+        height: 35,
         textAlign: 'center',
         backgroundColor: 'white',
+        paddingLeft: 10,
     },
     objectifTitle: {
-        top: -23,
+        top: -13,
         left: 25,
         fontWeight: 'bold'
     },
@@ -210,7 +212,7 @@ const styles = StyleSheet.create({
     width: '90%',
     minHeight: 50,
     borderRadius: 5,
-    top: -25,
+    top: -15,
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 20,
@@ -223,11 +225,11 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         borderColor: '#808080',
         borderWidth: 2,
-        width: 100,
+        width: 115,
         height: 30,
         fontSize: 25,
         textAlign: 'center',
-        borderRadius: 10,
+        borderRadius: 16,
     },
     editButton: {
         backgroundColor: '#4b86b4',
@@ -242,7 +244,7 @@ const styles = StyleSheet.create({
         color: 'white'
     },
     notifTitle: {
-        top: 5,
+        top: 2,
         left: 25,
         fontWeight: 'bold'
     },
