@@ -6,6 +6,7 @@ export default function ProfileScreen(props) {
 
     const [etudiantData, setEtudiantData] = useState(null);
     const [programmeData, setProgrammeData] = useState(null);
+    const [moyenneSouhaiteeData, setMoyenneSouhaiteeData] = useState(null);
     const [loading, setLoading] = useState(true);
 
     const matriculeVar = 2051798;
@@ -16,11 +17,13 @@ export default function ProfileScreen(props) {
     // Liens BD locale
     const urlEtudiant = `http://172.27.128.1:3000/api/etudiants/${matriculeVar}`;
     const urlProgramme = `http://172.27.128.1:3000/api/programmes/${matriculeVar}`;
+    const urlMoyenneSouhaitee = `http://172.27.128.1:3000/api/moyenneSouhaitee/${matriculeVar}`;
     // Pour trouver l'adresse ip de votre machine, cmd: ipconfig (choisir IPv4 Address sous Connection-specific DNS suffix)
 
     useEffect(() => {
         fetchData(urlEtudiant, setEtudiantData);
         fetchData(urlProgramme, setProgrammeData);
+        fetchData(urlMoyenneSouhaitee, setMoyenneSouhaiteeData);
     }, []);
 
     const fetchData = (url, setData) => {
@@ -54,38 +57,42 @@ export default function ProfileScreen(props) {
                     <View style={styles.infoContainer}>
                         <View style={styles.tfContainer}>
                             <Text style={styles.fieldText}>Prénom</Text>
-                            <TextInput style={styles.fieldInput} editable={false} placeholder={etudiantData.prenom} />
+                            <TextInput style={styles.fieldInput} editable={false} placeholder={etudiantData ? etudiantData.prenom : ''} />
                         </View>
                         <View style={styles.tfContainer}>
                             <Text style={styles.fieldText}>Nom</Text>
-                            <TextInput style={styles.fieldInput} editable={false} placeholder={etudiantData.nom} />
+                            <TextInput style={styles.fieldInput} editable={false} placeholder={etudiantData ? etudiantData.nom : ''} />
                         </View>
                         <View style={styles.tfContainer}>
                             <Text style={styles.fieldText}>Nom d`utilisateur</Text>
-                            <TextInput style={styles.fieldInput} editable={false} placeholder={etudiantData.nomUtilisateur} />
+                            <TextInput style={styles.fieldInput} editable={false} placeholder={etudiantData ? etudiantData.nomUtilisateur : ''} />
                         </View>
                         <View style={styles.tfContainer}>
                             <Text style={styles.fieldText}>Matricule</Text>
-                            <TextInput style={styles.fieldInput} editable={false} placeholder={etudiantData.matricule} />
+                            <TextInput style={styles.fieldInput} editable={false} placeholder={etudiantData ? etudiantData.matricule.toString() : ''} />
                         </View>
                         <View style={styles.tfContainer}>
                             <Text style={styles.fieldText}>Programme</Text>
-                            <TextInput style={styles.fieldInput} editable={false} placeholder={programmeData.titreProgramme} />
+                            <TextInput style={styles.fieldInput} editable={false} placeholder={programmeData ? programmeData.titreProgramme : ''} />
                         </View>
                         <View style={styles.tfContainer}>
                             <Text style={styles.fieldText}>Courriel</Text>
-                            <TextInput style={styles.fieldInput} editable={false} placeholder={etudiantData.courrielEtudiant} />
+                            <TextInput style={styles.fieldInput} editable={false} placeholder={etudiantData ? etudiantData.courrielEtudiant : ''} />
                         </View>
                         <View style={styles.tfContainer}>
                             <Text style={styles.fieldText}>Année d`étude</Text>
-                            <TextInput style={styles.fieldInput} editable={false} placeholder={"temp"} />
+                            <TextInput style={styles.fieldInput} editable={false} placeholder={etudiantData ? etudiantData.anneeEtudes.toString() : ''} />
                         </View>
                     </View>
 
                     <Text style={styles.objectifTitle}>Objectif</Text>
                     <View style={styles.objectifContainer}>
-                        <Text style={styles.goalTitle}>Moyenne generale souhaitee</Text>
-                        <TextInput style={styles.goalContainer} placeholder={"100%"} />
+                        <Text style={styles.goalTitle}>Moyenne générale souhaitée</Text>
+                        <TextInput
+                            style={styles.goalContainer}
+                            editable={false}
+                            placeholder={(moyenneSouhaiteeData ? moyenneSouhaiteeData.moyenneSouhaitee.toString() : '') + '%'}
+                        />
                         <TouchableOpacity style={styles.editButton}>
                             <Text style={styles.editIcon}>&#x270E;</Text>
                         </TouchableOpacity>
