@@ -68,7 +68,7 @@ export default function ProfileScreen(props) {
                     <View style={styles.titleContainer}>
                         <Text style={styles.titleText}>Mon Profil</Text>
                         <Image 
-                            source={require("../assets/TheSonOfMan.jpg")}
+                            source={require("../assets/alexandreRoy.jpg")}
                             style={styles.profileIcon}
                         />
                     </View>
@@ -93,7 +93,7 @@ export default function ProfileScreen(props) {
                         </View>
                         <View style={styles.tfContainer}>
                             <Text style={styles.fieldText}>Programme</Text>
-                            <TextInput style={styles.fieldInput} editable={false} placeholder={programmeData ? programmeData.titreProgramme : ''} />
+                            <TextInput style={styles.fieldInputProgramme} editable={false} placeholder={programmeData ? programmeData.titreProgramme : ''} />
                         </View>
                         <View style={styles.tfContainer}>
                             <Text style={styles.fieldText}>Courriel</Text>
@@ -157,15 +157,15 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     titleText: {
-        fontSize: 40,
+        fontSize: 35,
         fontWeight: 'bold',
     },
     profileIcon: {
-        width: 100,
-        height: 100,
+        width: 90,
+        height: 90,
         borderRadius: 50,
-        borderWidth: 8,
-        borderColor: '#ffff',
+        borderWidth: 1,
+        borderColor: 'black',
     },
     infoTitle: {
         position: 'absolute',
@@ -176,10 +176,10 @@ const styles = StyleSheet.create({
     infoContainer: {
         backgroundColor: '#adcbe3',
         width: '90%',
-        height: 380,
+        height: 360,
         borderRadius: 5,
         position: 'absolute',
-        top: 210,
+        top: 215,
     },
     tfContainer: {
         alignItems: 'center',
@@ -190,20 +190,31 @@ const styles = StyleSheet.create({
     },
     fieldText: {
         flex: 1,
-        fontSize: 18,
+        fontSize: 16,
     },
     fieldInput: {
         borderColor: '#808080',
         borderWidth: 2,
         borderRadius: 5,
-        width: 230,
+        width: 150,
         height: 35,
         textAlign: 'center',
         backgroundColor: 'white',
+        fontWeight: 'bold',
+    },
+    fieldInputProgramme: {
+        borderColor: '#808080',
+        borderWidth: 2,
+        borderRadius: 5,
+        width: 240,
+        height: 40,
+        textAlign: 'center',
+        backgroundColor: 'white',
         paddingLeft: 10,
+        fontWeight: 'bold',
     },
     objectifTitle: {
-        top: -13,
+        top: -30,
         left: 25,
         fontWeight: 'bold'
     },
@@ -212,7 +223,7 @@ const styles = StyleSheet.create({
     width: '90%',
     minHeight: 50,
     borderRadius: 5,
-    top: -15,
+    top: -29,
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 20,
@@ -226,15 +237,15 @@ const styles = StyleSheet.create({
         borderColor: '#808080',
         borderWidth: 2,
         width: 115,
-        height: 30,
+        height: 33,
         fontSize: 25,
         textAlign: 'center',
         borderRadius: 16,
     },
     editButton: {
         backgroundColor: '#4b86b4',
-        width: 30,
-        height: 30,
+        width: 60,
+        height: 40,
         borderRadius: 10,
         marginRight: 5,
     },
@@ -244,7 +255,7 @@ const styles = StyleSheet.create({
         color: 'white'
     },
     notifTitle: {
-        top: 2,
+        top: -18,
         left: 25,
         fontWeight: 'bold'
     },
@@ -253,7 +264,7 @@ const styles = StyleSheet.create({
         width: '90%',
         height: 125,
         borderRadius: 5,
-        top: '20',
+        top: -16,
         alignItems: 'center',
     },
     notifRow: {
@@ -271,7 +282,7 @@ const styles = StyleSheet.create({
     appText: {
         flex: 1,
         fontSize: 19,
-        paddingLeft: 10,
+        paddingLeft: 60,
         color: 'white',
         fontWeight: 'bold'
     }
