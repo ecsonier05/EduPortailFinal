@@ -35,9 +35,9 @@ export default function ProfileScreen(props) {
     // const url= `https://eduportail-69af4de32dad.herokuapp.com/api/etudiants/${matricule}`;
 
     // Liens BD locale
-    const urlEtudiant = `http://172.27.128.1:3000/api/etudiants/${matriculeVar}`;
-    const urlProgramme = `http://172.27.128.1:3000/api/programmes/${matriculeVar}`;
-    const urlMoyenneSouhaitee = `http://172.27.128.1:3000/api/moyenneSouhaitee/${matriculeVar}`;
+    const urlEtudiant = `http://192.168.56.1:3000/api/etudiants/${matriculeVar}`;
+    const urlProgramme = `http://192.168.56.1:3000/api/programmes/${matriculeVar}`;
+    const urlMoyenneSouhaitee = `http://192.168.56.1:3000/api/moyenneSouhaitee/${matriculeVar}`;
     // Pour trouver l'adresse ip de votre machine, cmd: ipconfig (choisir IPv4 Address sous Connection-specific DNS suffix)
 
     useEffect(() => {
@@ -196,7 +196,7 @@ const styles = StyleSheet.create({
         borderColor: '#808080',
         borderWidth: 2,
         borderRadius: 5,
-        width: 150,
+        width: 170,
         height: 35,
         textAlign: 'center',
         backgroundColor: 'white',
