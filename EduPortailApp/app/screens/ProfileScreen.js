@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Text, View, StyleSheet, Image, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native';
 import BouncyCheckbox from "react-native-bouncy-checkbox";
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 export default function ProfileScreen(props) {
 
@@ -8,6 +9,25 @@ export default function ProfileScreen(props) {
     const [programmeData, setProgrammeData] = useState(null);
     const [moyenneSouhaiteeData, setMoyenneSouhaiteeData] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [editedMoyenneSouhaitee, setEditedMoyenneSouhaitee] = useState('');
+    const [inputError, setInputError] = useState('');
+
+
+    // Fonction pour mise a jour de la moyenne souhaitée
+    const handleEditMoyenneSouhaitee = () => {
+        // Validation de la nouvelle valeur
+        const moyenne = parseInt(editedMoyenneSouhaitee);
+        if (isNaN(moyenne) || moyenne < 60 || moyenne > 100) {
+            setInputError('Moyenne souhaitée doit être un entier entre 60 et 100.');
+            return;
+        }
+        // Send the updated moyenne souhaitée to the server
+        // You need to implement this part using fetch or other methods
+        // Reset input error and update state after successful update
+        setInputError('');
+        // Update the state or perform any necessary action after successful update
+    };
+
 
     const matriculeVar = 2051798;
 
@@ -80,7 +100,7 @@ export default function ProfileScreen(props) {
                             <TextInput style={styles.fieldInput} editable={false} placeholder={etudiantData ? etudiantData.courrielEtudiant : ''} />
                         </View>
                         <View style={styles.tfContainer}>
-                            <Text style={styles.fieldText}>Année d`étude</Text>
+                            <Text style={styles.fieldText}>Année d`études</Text>
                             <TextInput style={styles.fieldInput} editable={false} placeholder={etudiantData ? etudiantData.anneeEtudes.toString() : ''} />
                         </View>
                     </View>
@@ -88,12 +108,16 @@ export default function ProfileScreen(props) {
                     <Text style={styles.objectifTitle}>Objectif</Text>
                     <View style={styles.objectifContainer}>
                         <Text style={styles.goalTitle}>Moyenne générale souhaitée</Text>
-                        <TextInput
-                            style={styles.goalContainer}
-                            editable={false}
-                            placeholder={(moyenneSouhaiteeData ? moyenneSouhaiteeData.moyenneSouhaitee.toString() : '') + '%'}
-                        />
-                        <TouchableOpacity style={styles.editButton}>
+                        <KeyboardAwareScrollView contentContainerStyle={styles.scrollContainer}>
+                            <TextInput
+                                style={styles.goalContainer}
+                                editable={true}
+                                placeholder={(moyenneSouhaiteeData ? moyenneSouhaiteeData.moyenneSouhaitee.toString() : '') + '%'}
+                                onChangeText={text => setEditedMoyenneSouhaitee(text)}
+                                value={editedMoyenneSouhaitee}
+                            />
+                        </KeyboardAwareScrollView>
+                        <TouchableOpacity style={styles.editButton} onPress={handleEditMoyenneSouhaitee}>
                             <Text style={styles.editIcon}>&#x270E;</Text>
                         </TouchableOpacity>
                     </View>
@@ -152,7 +176,7 @@ const styles = StyleSheet.create({
     infoContainer: {
         backgroundColor: '#adcbe3',
         width: '90%',
-        height: 320,
+        height: 380,
         borderRadius: 5,
         position: 'absolute',
         top: 210,
@@ -166,32 +190,30 @@ const styles = StyleSheet.create({
     },
     fieldText: {
         flex: 1,
-        fontSize: 19,
+        fontSize: 18,
     },
     fieldInput: {
         borderColor: '#808080',
         borderWidth: 2,
         borderRadius: 5,
-        width: 220,
+        width: 230,
         textAlign: 'center',
         backgroundColor: 'white',
     },
     objectifTitle: {
-        position: 'absolute',
-        top: 550,
+        top: -23,
         left: 25,
         fontWeight: 'bold'
     },
     objectifContainer : {
-        backgroundColor: '#adcbe3',
-        width: '90%',
-        height: 50,
-        borderRadius: 5,
-        position: 'absolute',
-        top: 566,
-        flexDirection: 'row',
-        alignItems: 'center',
-        paddingHorizontal: 20
+    backgroundColor: '#adcbe3',
+    width: '90%',
+    minHeight: 50,
+    borderRadius: 5,
+    top: -25,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 20,
     },
     goalTitle: {
         flex: 1,
@@ -201,12 +223,11 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         borderColor: '#808080',
         borderWidth: 2,
-        width: 80,
+        width: 100,
         height: 30,
         fontSize: 25,
         textAlign: 'center',
         borderRadius: 10,
-        marginRight: 10,
     },
     editButton: {
         backgroundColor: '#4b86b4',
@@ -221,8 +242,7 @@ const styles = StyleSheet.create({
         color: 'white'
     },
     notifTitle: {
-        position: 'absolute',
-        top: 635,
+        top: 5,
         left: 25,
         fontWeight: 'bold'
     },
@@ -231,8 +251,7 @@ const styles = StyleSheet.create({
         width: '90%',
         height: 125,
         borderRadius: 5,
-        position: 'absolute',
-        top: 650,
+        top: '20',
         alignItems: 'center',
     },
     notifRow: {
