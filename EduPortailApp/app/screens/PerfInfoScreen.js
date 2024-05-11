@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 import { useRoute } from "@react-navigation/native";
 import { BarChart, LineChart, PieChart, PopulationPyramid } from "react-native-gifted-charts";
@@ -7,7 +7,7 @@ import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 export default function PerfInfoScreen(props) {
 
     const route = useRoute();
-    const id = route.params?.id;
+    const idInscription = route.params?.id;
     const mode = route.params?.mode;
 
     const desired = 80.00;
@@ -15,6 +15,24 @@ export default function PerfInfoScreen(props) {
 
     let data = []
     let pond = []
+
+    const [evalData, setEvalData] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+    const urlEval = `http://192.168.56.1:3000/api/evaluations/${idInscription}`;
+
+    const fetchData = (url, setData) => {
+        fetch(url)
+            .then((resp) => {
+                if (!resp.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return resp.json();
+            })
+            .then((json) => setData(json))
+            .catch((error) => console.error('Error fetching data:', error))
+            .finally(() => setLoading(false));
+    };
 
     if(mode == 'moy'){
         data=[ 
@@ -25,19 +43,22 @@ export default function PerfInfoScreen(props) {
             {value: 65, label: 'SYST1037'}  
         ]
     } else {
-        data=[ 
-            {value: 50, label: 'Devoir 1'},
-            {value: 80, label: 'Devoir 2'},
-            {value: 5, label: 'Devoir 3'},
-            {value: 70, label: 'Test 1'},
-            {value: 100, label: 'Devoir 4'}  
-        ]
+
+        useEffect(() => {
+            fetchData(urlEval, setEvalData);
+        }, []);
 
         pond=[
-            {value: 40, text: '40%', color: '#177AD5'}, //Exams
-            {value: 25, text: '25%', color: '#79D2DE'}, //Tests
-            {value: 35, text: '35%', color: '#ED6665'}, //Homework
+            {value: 40, text: '40%', color: ''}, //Exams #177AD5
+            {value: 25, text: '25%', color: ''}, //Tests #79D2DE
+            {value: 35, text: '35%', color: ''}, //Homework #ED6665
         ]
+
+        {/*NEED ID DE EVALUATION POUR FILTRER PONDERATION*/}
+
+        for (let i = 0; i < (evalData ? evalData.length : 0); i++) {
+            data[i] = {value: (evalData ? evalData[i].notePourcentage : 0), label: (evalData ? evalData[i].nomEvaluation : '')}
+        }
     }
 
     return (
@@ -108,15 +129,19 @@ export default function PerfInfoScreen(props) {
                                 data = {pond}  
                             />
                             <Text style={{fontSize: 17, paddingTop: 5}}>
-                                <Text style={{color: '#177AD5'}}>■</Text><Text> Examen</Text>
+                                <Text style={{color: '#177AD5'}}>■</Text><Text> Devoir</Text>
                                 <Text style={{color: '#79D2DE'}}> ■</Text><Text> Test </Text>
-                                <Text style={{color: '#ED6665'}}>■</Text><Text> Devoir</Text>
+                                <Text style={{color: '#ED6665'}}>■</Text><Text> Projet</Text>
                             </Text>
                             {/*add missing components*/}
                             <Text style={{fontSize: 17}}>
-                                <Text>■ test4 </Text>
-                                <Text> ■ test5 </Text>
-                                <Text> ■ test6</Text>
+                                <Text>■</Text><Text> Presentation</Text>
+                                <Text>■</Text><Text> Exercice </Text>
+                                <Text>■</Text><Text> Quiz</Text>
+                            </Text>
+                            <Text style={{fontSize: 17}}>
+                                <Text>■</Text><Text> Examen</Text>
+                                <Text>■</Text><Text> Autre </Text>
                             </Text>
                         </View>
                         <View style={styles.boxMoyenne}>

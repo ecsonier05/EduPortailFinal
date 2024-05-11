@@ -6,12 +6,15 @@ export default function EvalScreen({ navigation }) {
     const matriculeVar = 2051798;
 
     const [classData, setClassData] = useState(null);
+    const [sessionActData, setSessionActData] = useState(null);
     const [loading, setLoading] = useState(true);
 
     const urlClass = `http://192.168.56.1:3000/api/cours/${matriculeVar}`;
+    const urlSessionAct = `http://192.168.56.1:3000/api/sessionactuelle/${matriculeVar}`;
 
     useEffect(() => {
         fetchData(urlClass, setClassData);
+        fetchData(urlSessionAct, setSessionActData);
     }, []);
 
     const fetchData = (url, setData) => {
@@ -31,12 +34,12 @@ export default function EvalScreen({ navigation }) {
 
         const buttonItems = [];
 
-        for (let i = 0; i < 3; i++) {
+        for (let i = 0; i < (classData ? classData.length : 0); i++) {
             buttonItems.push(
                 <View style={styles.classRow} key={i}>
-                    <TouchableOpacity style={styles.classButton} onPress={() => navigation.navigate('EvalClass', {id: "45b"})}>
-                        <Text style={styles.sigleText}>{classData[i].sigle}</Text>
-                        <Text style={styles.classText}>{classData[i].titreCours}</Text>
+                    <TouchableOpacity style={styles.classButton} onPress={() => navigation.navigate('EvalClass', {id: classData ? classData[i].idInscription : ''})}>
+                        <Text style={styles.sigleText}>{classData ? classData[i].sigle : ''}</Text>
+                        <Text style={styles.classText}>{classData ? classData[i].titreCours : ''}</Text>
                     </TouchableOpacity>
                 </View>
             );
@@ -54,7 +57,7 @@ export default function EvalScreen({ navigation }) {
                 <Text style={styles.evalTitle}>Mes évaluations</Text>
 
                 {/*use api to display session*/}
-                <Text style={styles.evalSessionText}>Session actuelle: Printemps 2024</Text>
+                <Text style={styles.evalSessionText}>Session actuelle: {sessionActData ? sessionActData.nomSession : ''}</Text>
 
                 <View style={styles.classLabels}>
                     <Text style={styles.sigleLabel}>Sigle</Text>

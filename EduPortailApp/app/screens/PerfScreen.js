@@ -5,29 +5,51 @@ import { RadioButton } from 'react-native-paper';
 
 function PerfScreen({ navigation }) {
 
-    let table = ["un", "deux", "trois"]; 
-
     //Radio Buttons
     const [courChecked, setCourChecked] = React.useState('un');
     const [resultChecked, setResultChecked] = React.useState('moy');
+
+    const matriculeVar = 2051798;
+
+    const [classData, setClassData] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+    const urlClass = `http://192.168.56.1:3000/api/cours/${matriculeVar}`;
+
+    useEffect(() => {
+        fetchData(urlClass, setClassData);
+    }, []);
+
+    const fetchData = (url, setData) => {
+        fetch(url)
+            .then((resp) => {
+                if (!resp.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return resp.json();
+            })
+            .then((json) => setData(json))
+            .catch((error) => console.error('Error fetching data:', error))
+            .finally(() => setLoading(false));
+    };
 
     const renderRadio = () => {
 
         const radioItems = [];
 
-        for (let i = 0; i < 3; i++) {
+        for (let i = 0; i < (classData ? classData.length : 0); i++) {
             radioItems.push(
                 <View style={styles.checkContainer} key={i}>
                     <View style={styles.checkContent}>
                         <RadioButton 
-                            value="first"
-                            status={ courChecked === table[i] ? 'checked' : 'unchecked' }
-                            onPress={() => setCourChecked(table[i])}
+                            value={classData ? classData[i].idInscription : ''}
+                            status={ courChecked === (classData ? classData[i].idInscription : '') ? 'checked' : 'unchecked' }
+                            onPress={() => setCourChecked(classData ? classData[i].idInscription : '')}
                             color="#3d88ec"
                         />
-                        <Text style={styles.titleContent}>PROG1297</Text>
+                        <Text style={styles.titleContent}>{classData ? classData[i].sigle : ''}</Text>
                     </View>
-                    <Text style={styles.descContent}>Programmation Web PHP et Ajax</Text>
+                    <Text style={styles.descContent}>{classData ? classData[i].titreCours : ''}</Text>
                 </View>
             );
         }

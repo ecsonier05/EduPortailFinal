@@ -1,28 +1,82 @@
 import React, { useEffect, useState } from 'react';
-import { Text, StyleSheet, View, ScrollView, TouchableOpacity, Alert} from 'react-native';
+import { Text, StyleSheet, View, ScrollView, TouchableOpacity, Alert, ActivityIndicator} from 'react-native';
 import { useRoute } from "@react-navigation/native";
 import { Dropdown } from 'react-native-element-dropdown';
 
 export default function EvalClassScreen(props) {
 
+    
+
     const route = useRoute();
-    const id = route.params?.id;
+    const idInscription = route.params?.id;
+
+    const matriculeVar = 2051798;
+
+    const [evalData, setEvalData] = useState(null);
+    const [classData, setClassData] = useState(null);
+    const [sessionActData, setSessionActData] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+    const urlEval = `http://192.168.56.1:3000/api/evaluations/${idInscription}`;
+    const urlClass = `http://192.168.56.1:3000/api/cours/${matriculeVar}`;
+    const urlSessionAct = `http://192.168.56.1:3000/api/sessionactuelle/${matriculeVar}`;
+
+    useEffect(() => {
+        fetchData(urlEval, setEvalData);
+        fetchData(urlClass, setClassData);
+        fetchData(urlSessionAct, setSessionActData);
+    }, []);
+
+    const fetchData = (url, setData) => {
+        fetch(url)
+            .then((resp) => {
+                if (!resp.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return resp.json();
+            })
+            .then((json) => setData(json))
+            .catch((error) => console.error('Error fetching data:', error))
+            .finally(() => setLoading(false));
+    };
+
+    const findSigle = () =>{
+        for (let i = 0; i < (classData ? classData.length: 0); i++) {
+            if((classData ? classData[i].idInscription: 0) == idInscription){
+                return (classData ? classData[i].sigle: '');
+            }
+        }
+    }
+
+    const findTitre = () =>{
+        for (let i = 0; i < (classData ? classData.length: 0); i++) {
+            if((classData ? classData[i].idInscription: 0) == idInscription){
+                return (classData ? classData[i].titreCours: '');
+            }
+        }
+    }
 
     const renderList = () => {
 
         const listItems = [];
 
-        for (let i = 0; i < 8; i++) {
+        for (let i = 0; i < (evalData ? evalData.length : 0); i++) {
             listItems.push(
                 <View style={styles.testListItems} key={i}>
-                    <Text style={styles.testDate}>2024-05-21</Text>
-                    <Text style={styles.evalType}>Devoir 4</Text>
-                    <Text style={styles.grade}>32/35 - 91.43%</Text>
+                    <Text style={styles.testDate}>{evalData ? evalData[i].datePublication.substring(0,10) : ''}</Text>
+                    <Text style={styles.evalType}>{evalData ? evalData[i].nomEvaluation : ''}</Text>
+                    <Text style={styles.grade}>{evalData ? evalData[i].notePointage : ''}/{evalData ? evalData[i].pointage : ''} - {evalData ? evalData[i].notePourcentage : ''}%</Text>
                     <View style={styles.buttonContainer}>
-                        {/*add if condition for displaying button (disable and turn grey if empty)*/}
-                        <TouchableOpacity style={styles.retroButton} onPress={() => Alert.alert('Retroaction', 'test')}>
-                            <Text style={styles.retroText}>Voir retroaction</Text>
-                        </TouchableOpacity>
+                        {(evalData ? evalData[i].retroaction : null) != null ? (
+                            <TouchableOpacity style={styles.retroButton} onPress={() => Alert.alert('Retroaction', evalData ? evalData[i].retroaction : '')}>
+                                <Text style={styles.retroText}>Voir retro</Text>
+                            </TouchableOpacity>
+                        ) : (
+                            <TouchableOpacity style={styles.retroButtonDisabled} disabled={true}>
+                                <Text style={styles.retroText}>Voir retro</Text>
+                            </TouchableOpacity>
+                        )}
+                        
                     </View>
                 </View>
             );
@@ -32,7 +86,7 @@ export default function EvalClassScreen(props) {
     }
 
     //Drop Down List
-    const data = [
+    const selectedSort = [
         { label: 'Date (plus recente)', value: '1' },
         { label: 'Date (plus ancienne)', value: '2' },
         { label: 'Note (plus elevee)', value: '3' },
@@ -43,55 +97,64 @@ export default function EvalClassScreen(props) {
     const [isFocus, setIsFocus] = useState(false);
 
     return (
-        <View style={styles.container}>
-            <Text style={styles.evalClassTitle}>
-                {/*change with selected class (filter)*/}
-                <Text style={styles.titleID}>PROG1297</Text>
-                <Text> - Programmation Web PHP et Ajax</Text>
-            </Text>
+        <View style={styles.mainContainer}>
+            {loading ? (
+                <ActivityIndicator />
+            ) : (
+            <View style={styles.container}>
+                <Text style={styles.evalClassTitle}>
+                    {/*change with selected class (filter)*/}
+                    <Text style={styles.titleID}>{findSigle()}</Text>
+                    <Text> - {findTitre()}</Text>
+                </Text>
 
-            <View style={styles.classInfoContainer}>
-                <Text style={{fontSize: 20}}>Session: {id}</Text>
-                <Text style={{fontSize: 20}}>Enseignant: Joel Boudreau</Text>
+                <View style={styles.classInfoContainer}>
+                    <Text style={{fontSize: 20}}>Session: {sessionActData ? sessionActData.nomSession : ''}</Text>
+                    <Text style={{fontSize: 20}}>Enseignant: Joel Boudreau</Text>
+                </View>
+
+
+                <View style={styles.filterContainer}>
+                    <Text>Trier par</Text>
+                    <Dropdown
+                        style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
+                        placeholderStyle={styles.placeholderStyle}
+                        selectedTextStyle={styles.selectedTextStyle}
+                        inputSearchStyle={styles.inputSearchStyle}
+                        data={selectedSort}
+                        labelField="label"
+                        valueField="value"
+                        placeholder={!isFocus ? 'Select item' : '...'}
+                        searchPlaceholder="Search..."
+                        value={value}
+                        onFocus={() => setIsFocus(true)}
+                        onBlur={() => setIsFocus(false)}
+                        onChange={item => {
+                            setValue(item.value);
+                            setIsFocus(false);
+                        }}
+                    />
+                </View>
+
+                <View style={styles.testsListContainer}>
+                    <ScrollView style={styles.testsListScroll}>
+                        {renderList()}
+                    </ScrollView>
+                </View>
             </View>
-
-
-            <View style={styles.filterContainer}>
-                <Text>Trier par</Text>
-                <Dropdown
-                    style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
-                    placeholderStyle={styles.placeholderStyle}
-                    selectedTextStyle={styles.selectedTextStyle}
-                    inputSearchStyle={styles.inputSearchStyle}
-                    data={data}
-                    labelField="label"
-                    valueField="value"
-                    placeholder={!isFocus ? 'Select item' : '...'}
-                    searchPlaceholder="Search..."
-                    value={value}
-                    onFocus={() => setIsFocus(true)}
-                    onBlur={() => setIsFocus(false)}
-                    onChange={item => {
-                        setValue(item.value);
-                        setIsFocus(false);
-                    }}
-                />
-            </View>
-
-            <View style={styles.testsListContainer}>
-                <ScrollView style={styles.testsListScroll}>
-                    {renderList()}
-                </ScrollView>
-            </View>
+            )}
         </View>  
     );
 }
 
 const styles = StyleSheet.create({
     //main Container
-    container: {
+    mainContainer: {
         flex: 1,
         backgroundColor: '#e7eff6',
+    },
+    container: {
+        flex: 1,
         alignItems: 'center',
         justifyContent: 'flex-end',
     },
@@ -168,6 +231,13 @@ const styles = StyleSheet.create({
     },
     retroButton: {
         backgroundColor: '#4b86b4',
+        height: 20,
+        width: 85,
+        borderRadius: 5,
+        justifyContent: 'center'
+    },
+    retroButtonDisabled: {
+        backgroundColor: 'gray',
         height: 20,
         width: 85,
         borderRadius: 5,
