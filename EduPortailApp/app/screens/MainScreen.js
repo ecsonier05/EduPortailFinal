@@ -8,17 +8,21 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { Dimensions } from 'react-native';
 import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
+import { useRoute } from "@react-navigation/native";
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
 export default function MainScreen({ navigation }) {
 
+    const route = useRoute();
+
     const matriculeVar = 2051798;
+    const idInscription = route.params?.id;
 
     const [classData, setClassData] = useState(null);
     const [sessionActData, setSessionActData] = useState(null);
-    const [evalData, setData] = useState(null);
+    const [evalData, setEvalData] = useState(null);
     const [loading, setLoading] = useState(true);
 
     const urlClass = `http://192.168.2.81:3000/api/cours/${matriculeVar}`;
@@ -103,7 +107,7 @@ export default function MainScreen({ navigation }) {
                 {/*Get image from database*/}
                 <TouchableOpacity onPress={() => navigation.navigate('Profil')}>
                     <Image
-                        source={require("../assets/TheSonOfMan.jpg")}
+                        source={require("../assets/alexandreRoy.jpg")}
                         style={styles.profileIcon}
                     />
                 </TouchableOpacity>
