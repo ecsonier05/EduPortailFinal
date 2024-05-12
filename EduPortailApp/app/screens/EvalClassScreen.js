@@ -17,7 +17,7 @@ export default function EvalClassScreen(props) {
     const [sessionActData, setSessionActData] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    const urlEval = `http://192.168.56.1:3000/api/evaluations/${idInscription}`;
+    const urlEval = `http://192.168.56.1:3000/api/evaluations/inscription/${idInscription}`;
     const urlClass = `http://192.168.56.1:3000/api/cours/${matriculeVar}`;
     const urlSessionAct = `http://192.168.56.1:3000/api/sessionactuelle/${matriculeVar}`;
 
@@ -109,8 +109,8 @@ export default function EvalClassScreen(props) {
                 </Text>
 
                 <View style={styles.classInfoContainer}>
-                    <Text style={{fontSize: 20}}>Session: {sessionActData ? sessionActData.nomSession : ''}</Text>
-                    <Text style={{fontSize: 20}}>Enseignant: Joel Boudreau</Text>
+                    <Text style={{fontSize: 18}}>Session: {sessionActData ? sessionActData.nomSession : ''}</Text>
+                    <Text style={{fontSize: 18}}>Enseignant: Joel Boudreau</Text>
                 </View>
 
 
@@ -171,7 +171,7 @@ const styles = StyleSheet.create({
     },
     classInfoContainer: {
         position: 'absolute',
-        top: '11%',
+        top: '20%',
         left: '6%',
     },
     filterContainer: {
@@ -179,7 +179,7 @@ const styles = StyleSheet.create({
         height: 60,
         borderRadius: 5,
         position: 'absolute',
-        top: '18%',
+        top: '30%',
     },
     dropdown: {
         height: 25,
@@ -192,7 +192,8 @@ const styles = StyleSheet.create({
     },
     testsListContainer: {
         position: 'absolute',
-        top: '30%',
+        top: '40%',
+        left: '5%',
         width: '90%',
         height: '65%'
     },
