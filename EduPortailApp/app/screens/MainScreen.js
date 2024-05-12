@@ -4,61 +4,57 @@
     Description:    Accueil
 */
 
-// Import necessary modules
+// Importation de modules
 import React, { useEffect, useState } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { Dimensions } from 'react-native';
 import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 import { useRoute } from "@react-navigation/native";
 
-// Get window dimensions
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
-// Main component
 export default function MainScreen({ navigation }) {
-    // Get route parameters
     const route = useRoute();
     const idInscription = route.params?.id;
 
     const matriculeVar = 2051798;
 
-    // State variables for data
     const [classData, setClassData] = useState(null);
     const [sessionActData, setSessionActData] = useState(null);
     const [evalData, setEvalData] = useState(null);
     const [retroData, setRetroData] = useState(null);
+    const [moyenneSouhaiteeData, setMoyenneSouhaiteeData] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    // URLs for data fetching
     const urlClass = `http://192.168.56.1:3000/api/cours/${matriculeVar}`;
     const urlSessionAct = `http://192.168.56.1:3000/api/sessionactuelle/${matriculeVar}`;
     const urlEval = `http://192.168.56.1:3000/api/evaluations/matricule/${matriculeVar}`;
     const urlRetro = `http://192.168.56.1:3000/api/evaluations/retroaction/${matriculeVar}`;
+    const urlMoyenneSouhaitee = `http://192.168.56.1:3000/api/moyenneSouhaitee/${matriculeVar}`;
 
-    // Fetch data from APIs
     useEffect(() => {
         fetchData(urlClass, setClassData);
         fetchData(urlSessionAct, setSessionActData);
         fetchData(urlEval, setEvalData);
         fetchData(urlRetro, setRetroData);
+        fetchData(urlMoyenneSouhaitee, setMoyenneSouhaiteeData);
     }, []);
 
-    // Function to fetch data from API
     const fetchData = (url, setData) => {
         fetch(url)
             .then((resp) => {
                 if (!resp.ok) {
-                    throw new Error('Network response was not ok');
+                    throw new Error('La réponse du réseau est incorrecte.');
                 }
                 return resp.json();
             })
             .then((json) => setData(json))
-            .catch((error) => console.error('Error fetching data:', error))
+            .catch((error) => console.error('Erreur lors de la récupération des données:', error))
             .finally(() => setLoading(false));
     };
 
-    const findSigle = () =>{
+    const findSigle = () => {
         if (classData) {
             for (let i = 0; i < 3 && i < classData.length; i++) {
                 if (classData[i].idInscription === idInscription) {
@@ -69,7 +65,7 @@ export default function MainScreen({ navigation }) {
         return '';
     }
 
-    const findNomEval = () =>{
+    const findNomEval = () => {
         if (evalData) {
             for (let i = 0; i < 3 && i < evalData.length; i++) {
                 if (evalData[i].idInscription === idInscription) {
@@ -80,7 +76,7 @@ export default function MainScreen({ navigation }) {
         return '';
     }
 
-    const findNotePourcentage = () =>{
+    const findNotePourcentage = () => {
         if (evalData) {
             for (let i = 0; i < 3 && i < evalData.length; i++) {
                 if (evalData[i].idInscription === idInscription) {
@@ -91,11 +87,10 @@ export default function MainScreen({ navigation }) {
         return '';
     }
 
-    // Render recent evaluations
     const renderRecentEvals = () => {
         const evalItems = [];
         if (evalData) {
-            const recentEvals = evalData.slice(0, 3); // Take the first 3 evaluations
+            const recentEvals = evalData.slice(0, 3);
             recentEvals.forEach((evaluation, index) => {
                 evalItems.push(
                     <View style={styles.evalRow} key={index}>
@@ -109,17 +104,16 @@ export default function MainScreen({ navigation }) {
         return evalItems;
     };
 
-    // Render retro feedback
     const renderRetro = () => {
         const retroItems = [];
         if (retroData) {
-            const recentRetros = retroData.slice(0,3);
+            const recentRetros = retroData.slice(0, 3);
             recentRetros.forEach((retroaction, index) => {
                 retroItems.push(
                     <View style={styles.retroRow} key={index}>
                         <Text numberOfLines={1} style={styles.retroText}>{retroaction.sigle}</Text>
                         <Text numberOfLines={1} style={styles.retroText}>{retroaction.nomEvaluation}</Text>
-                        <TouchableOpacity style={styles.retroButton} onPress={() => navigation.navigate('EvalClass', {id: "45b"})}>
+                        <TouchableOpacity style={styles.retroButton} onPress={() => navigation.navigate('EvalClass', { id: "45b" })}>
                             <Text style={styles.retroBtnText}>Voir Plus</Text>
                         </TouchableOpacity>
                     </View>
@@ -129,63 +123,88 @@ export default function MainScreen({ navigation }) {
         return retroItems;
     };
 
-    // Calculate general average
-    let moyGenerale = 86.50;
+    let totalScore = 0;
+    let totalCourses = 0;
+
+    if (evalData) {
+        evalData.forEach(evaluation => {
+            if (evaluation.notePourcentage) {
+                totalScore += evaluation.notePourcentage;
+                totalCourses++;
+            }
+        });
+    }
+
+    let moyGenerale = totalCourses > 0 ? totalScore / totalCourses : 0;
     moyGenerale = moyGenerale.toFixed(2);
+
+    const backgroundColorMoyenneGenerale = (moyGenerale, moyenneSouhaiteeData) => {
+        if (moyenneSouhaiteeData && moyGenerale >= moyenneSouhaiteeData.moyenneSouhaitee) {
+            return '#7ac25a';
+        } else if (moyGenerale >= 60) {
+            return '#f1c232';
+        } else {
+            return '#ff4137';
+        }
+    };
 
     // JSX rendering
     return (
         <View style={styles.container}>
-            {/* Title section */}
-            <View style={styles.titleContainer}>
-                <TouchableOpacity onPress={() => navigation.navigate('Profil')}>
-                    <Image source={require("../assets/alexandreRoy.jpg")} style={styles.profileIcon} />
-                </TouchableOpacity>
-                <Text style={styles.titleText}>Ma moyenne générale</Text>
-                <Text style={styles.sessionText}>{"Session:\n Printemps 2024"}</Text>
-            </View>
-
-            {/* General average */}
-            <View style={styles.moyenneContainer}>
-                <Text style={styles.moyenneText}>{moyGenerale}%</Text>
-            </View>
-
-            {/* Recent evaluations */}
-            <View style={styles.evalContainer}>
-                <Text style={styles.contTitle}>Notes d'évaluation récentes</Text>
-                {renderRecentEvals()}
-                <TouchableOpacity style={styles.evalButton} onPress={() => navigation.navigate('Évaluations')}>
-                    <Text style={styles.evalBtnText}>Voir Plus</Text>
-                </TouchableOpacity>
-            </View>
-
-            <View style={styles.retroContainer}>
-                <Text style={styles.contTitle}>Rétroactions récentes</Text>
-                {/*add function to pressable*/}
-                {renderRetro()}
-            </View>
-
-            {/*backend code to check the highest and lowest grades*/}
-            <View style={styles.forceFaiblesseContainer}>
-                <View style={styles.boxForce}>
-                    <Text style={styles.contTitle}>Force</Text>
-                    <View style={styles.boxForceInfo}>
-                        <View style={styles.moyForce}>
-                            <Text style={styles.forcePour}>96.49%</Text>
-                        </View>
-                        <Text style={styles.moyForceText}>PROG1206</Text>
+            {moyenneSouhaiteeData && (
+                <>
+                    {/* Section titre */}
+                    <View style={styles.titleContainer}>
+                        <TouchableOpacity onPress={() => navigation.navigate('Profil')}>
+                            <Image source={require("../assets/alexandreRoy.jpg")} style={styles.profileIcon} />
+                        </TouchableOpacity>
+                        <Text style={styles.titleText}>Ma moyenne générale</Text>
+                        <Text style={styles.sessionText}>{"Session:\n Printemps 2024"}</Text>
                     </View>
-                </View>
-                <View style={styles.boxFaiblesse}>
-                    <Text style={styles.contTitle}>Faiblesse</Text>
-                    <View style={styles.boxFaiblesseInfo}>
-                        <View style={styles.moyFaiblesse}>
-                            <Text style={styles.forcePour}>67.26%</Text>
-                        </View>
-                        <Text style={styles.moyFaiblesseText}>PROG1206</Text>
+
+                    {/* Moyenne générale */}
+                    <View style={[styles.moyenneContainer, { backgroundColor: backgroundColorMoyenneGenerale(parseFloat(moyGenerale), moyenneSouhaiteeData) }]}>
+                        <Text style={styles.moyenneText}>{moyGenerale}%</Text>
                     </View>
-                </View>
-            </View>
+
+                    {/* Évaluations récentes */}
+                    <View style={styles.evalContainer}>
+                        <Text style={styles.contTitle}>Notes d'évaluation récentes</Text>
+                        {renderRecentEvals()}
+                        <TouchableOpacity style={styles.evalButton} onPress={() => navigation.navigate('Évaluations')}>
+                            <Text style={styles.evalBtnText}>Voir Plus</Text>
+                        </TouchableOpacity>
+                    </View>
+
+                    <View style={styles.retroContainer}>
+                        <Text style={styles.contTitle}>Rétroactions récentes</Text>
+                        {/*add function to pressable*/}
+                        {renderRetro()}
+                    </View>
+
+                    {/*backend code to check the highest and lowest grades*/}
+                    <View style={styles.forceFaiblesseContainer}>
+                        <View style={styles.boxForce}>
+                            <Text style={styles.contTitle}>Force</Text>
+                            <View style={styles.boxForceInfo}>
+                                <View style={styles.moyForce}>
+                                    <Text style={styles.forcePour}>96.49%</Text>
+                                </View>
+                                <Text style={styles.moyForceText}>PROG1206</Text>
+                            </View>
+                        </View>
+                        <View style={styles.boxFaiblesse}>
+                            <Text style={styles.contTitle}>Faiblesse</Text>
+                            <View style={styles.boxFaiblesseInfo}>
+                                <View style={styles.moyFaiblesse}>
+                                    <Text style={styles.forcePour}>67.26%</Text>
+                                </View>
+                                <Text style={styles.moyFaiblesseText}>PROG1206</Text>
+                            </View>
+                        </View>
+                    </View>
+                </>
+            )}
         </View>
     );
 }
@@ -227,7 +246,7 @@ const styles = StyleSheet.create({
 
     //for circle with moyenne
     moyenneContainer: {
-        backgroundColor: '#7ac25a',
+        //backgroundColor: backgroundColorMoyenneGenerale(parseFloat(moyGenerale)),
         width: windowWidth * 0.3,
         height: windowHeight * 0.15,
         borderRadius: (windowWidth * 0.3) / 2,  // Cercle parfait
