@@ -4,7 +4,7 @@
     Description:    Accueil
 */
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { Dimensions } from 'react-native';
 import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
@@ -13,6 +13,51 @@ const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
 export default function MainScreen({ navigation }) {
+
+    const matriculeVar = 2051798;
+
+    const [classData, setClassData] = useState(null);
+    const [sessionActData, setSessionActData] = useState(null);
+    const [evalData, setData] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+    const urlClass = `http://192.168.2.81:3000/api/cours/${matriculeVar}`;
+    const urlSessionAct = `http://192.168.2.81:3000/api/sessionactuelle/${matriculeVar}`;
+    const urlEval = `http://192.168.2.81:3000/api/evaluations/${idInscription}`;
+
+    useEffect(() => {
+        fetchData(urlClass, setClassData);
+        fetchData(urlSessionAct, setSessionActData);
+        fetchData(urlEval, setEvalData);
+    }, []);
+
+    const fetchData = (url, setData) => {
+        fetch(url)
+            .then((resp) => {
+                if (!resp.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return resp.json();
+            })
+            .then((json) => setData(json))
+            .catch((error) => console.error('Error fetching data:', error))
+            .finally(() => setLoading(false));
+    };
+
+    const fetchRecentEvals = (url) => {
+        fetch(url)
+            .then((resp) => {
+                if (!resp.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return resp.json();
+            })
+            .then((json) => {
+                setEvalData(json.slice(0, 3)); // Get les 3 évaluations les plus récentes
+            })
+            .catch((error) => console.error('Error fetching evaluation data:', error))
+            .finally(() => setLoading(false));
+    };
 
     let moyGenerale = 86.50;
     moyGenerale = moyGenerale.toFixed(2);
