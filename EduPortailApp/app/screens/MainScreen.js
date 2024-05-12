@@ -4,37 +4,44 @@
     Description:    Accueil
 */
 
+// Import necessary modules
 import React, { useEffect, useState } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { Dimensions } from 'react-native';
 import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 import { useRoute } from "@react-navigation/native";
 
+// Get window dimensions
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
+// Main component
 export default function MainScreen({ navigation }) {
-
+    // Get route parameters
     const route = useRoute();
-
-    const matriculeVar = 2051798;
     const idInscription = route.params?.id;
 
+    const matriculeVar = 2051798;
+
+    // State variables for data
     const [classData, setClassData] = useState(null);
     const [sessionActData, setSessionActData] = useState(null);
     const [evalData, setEvalData] = useState(null);
     const [loading, setLoading] = useState(true);
 
+    // URLs for data fetching
     const urlClass = `http://192.168.56.1:3000/api/cours/${matriculeVar}`;
     const urlSessionAct = `http://192.168.56.1:3000/api/sessionactuelle/${matriculeVar}`;
-    const urlEval = `http://192.168.56.1:3000/api/evaluations/${idInscription}`;
+    const urlEval = `http://192.168.56.1:3000/api/evaluations/matricule/${matriculeVar}`;
 
+    // Fetch data from APIs
     useEffect(() => {
         fetchData(urlClass, setClassData);
         fetchData(urlSessionAct, setSessionActData);
         fetchData(urlEval, setEvalData);
     }, []);
 
+    // Function to fetch data from API
     const fetchData = (url, setData) => {
         fetch(url)
             .then((resp) => {
@@ -48,45 +55,60 @@ export default function MainScreen({ navigation }) {
             .finally(() => setLoading(false));
     };
 
-    const fetchRecentEvals = (url) => {
-        fetch(url)
-            .then((resp) => {
-                if (!resp.ok) {
-                    throw new Error('Network response was not ok');
+    const findSigle = () =>{
+        if (classData) {
+            for (let i = 0; i < 3 && i < classData.length; i++) {
+                if (classData[i].idInscription === idInscription) {
+                    return classData[i].sigle || '';
                 }
-                return resp.json();
-            })
-            .then((json) => {
-                setEvalData(json.slice(0, 3)); // Get les 3 évaluations les plus récentes
-            })
-            .catch((error) => console.error('Error fetching evaluation data:', error))
-            .finally(() => setLoading(false));
-    };
-
-    let moyGenerale = 86.50;
-    moyGenerale = moyGenerale.toFixed(2);
-
-    const renderEvals = () => {
-
-        const evalItems = [];
-
-        for (let i = 0; i < 3; i++) {
-            evalItems.push(
-                <View style={styles.evalRow} key={i}>
-                    <Text numberOfLines={1} style={styles.evalText}>SYST1036</Text>
-                    <Text numberOfLines={1} style={styles.evalText}>Projet 1 L'analyse</Text>
-                    <Text numberOfLines={1} style={styles.evalText}>92.81%</Text>
-                </View>
-            );
+            }
         }
-
-        return evalItems;
+        return '';
     }
 
+    const findNomEval = () =>{
+        if (evalData) {
+            for (let i = 0; i < 3 && i < evalData.length; i++) {
+                if (evalData[i].idInscription === idInscription) {
+                    return evalData[i].nomEvaluation || '';
+                }
+            }
+        }
+        return '';
+    }
+
+    const findNotePourcentage = () =>{
+        if (evalData) {
+            for (let i = 0; i < 3 && i < evalData.length; i++) {
+                if (evalData[i].idInscription === idInscription) {
+                    return evalData[i].notePourcentage || '';
+                }
+            }
+        }
+        return '';
+    }
+
+    // Render recent evaluations
+const renderRecentEvals = () => {
+    const evalItems = [];
+    if (evalData) {
+        const recentEvals = evalData.slice(0, 3); // Take the first 3 evaluations
+        recentEvals.forEach((evaluation, index) => {
+            evalItems.push(
+                <View style={styles.evalRow} key={index}>
+                    <Text numberOfLines={1} style={styles.evalText}>{evaluation.sigle}</Text>
+                    <Text numberOfLines={1} style={styles.evalText}>{evaluation.nomEvaluation}</Text>
+                    <Text numberOfLines={1} style={styles.evalText}>{evaluation.notePourcentage}%</Text>
+                </View>
+            );
+        });
+    }
+    return evalItems;
+};
+
+    // Render retro feedback
     const renderRetro = () => {
-
         const retroItems = [];
-
         for (let i = 0; i < 3; i++) {
             retroItems.push(
                 <View style={styles.retroRow} key={i}>
@@ -97,45 +119,41 @@ export default function MainScreen({ navigation }) {
                 </View>
             );
         }
-
         return retroItems;
     }
 
+    // Calculate general average
+    let moyGenerale = 86.50;
+    moyGenerale = moyGenerale.toFixed(2);
+
+    // JSX rendering
     return (
         <View style={styles.container}>
+            {/* Title section */}
             <View style={styles.titleContainer}>
-                {/*Get image from database*/}
                 <TouchableOpacity onPress={() => navigation.navigate('Profil')}>
-                    <Image
-                        source={require("../assets/alexandreRoy.jpg")}
-                        style={styles.profileIcon}
-                    />
+                    <Image source={require("../assets/alexandreRoy.jpg")} style={styles.profileIcon} />
                 </TouchableOpacity>
                 <Text style={styles.titleText}>Ma moyenne générale</Text>
-
                 <Text style={styles.sessionText}>{"Session:\n Printemps 2024"}</Text>
             </View>
 
-
-
+            {/* General average */}
             <View style={styles.moyenneContainer}>
-                {/*Do math here*/}
                 <Text style={styles.moyenneText}>{moyGenerale}%</Text>
             </View>
 
+            {/* Recent evaluations */}
             <View style={styles.evalContainer}>
                 <Text style={styles.contTitle}>Notes d'évaluation récentes</Text>
-                {renderEvals()}
-
+                {renderRecentEvals()}
                 <TouchableOpacity style={styles.evalButton} onPress={() => navigation.navigate('Évaluations')}>
-                        <Text style={styles.evalBtnText}>Voir Plus</Text>
+                    <Text style={styles.evalBtnText}>Voir Plus</Text>
                 </TouchableOpacity>
             </View>
 
             <View style={styles.retroContainer}>
                 <Text style={styles.contTitle}>Rétroactions récentes</Text>
-
-                {/*for loop for 3 most recent*/}
                 {/*add function to pressable*/}
                 {renderRetro()}
             </View>
