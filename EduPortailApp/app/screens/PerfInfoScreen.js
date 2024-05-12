@@ -10,16 +10,24 @@ export default function PerfInfoScreen(props) {
     const idInscription = route.params?.id;
     const mode = route.params?.mode;
 
-    const desired = 80.00;
+    const matriculeVar = 2051798;
+
+    let desired = 0;
     const obtained = 85.72;
 
-    let data = []
-    let pond = []
+    let data = [];
+    let pond = [];
+
+    let avgResult = 0;
+
+    
 
     const [evalData, setEvalData] = useState(null);
+    const [moyDData, setMoyDData] = useState(null);
     const [loading, setLoading] = useState(true);
 
     const urlEval = `http://192.168.56.1:3000/api/evaluations/${idInscription}`;
+    const urlMoyD = `http://192.168.56.1:3000/api/moyenneSouhaitee/2051798`;
 
     const fetchData = (url, setData) => {
         fetch(url)
@@ -46,19 +54,54 @@ export default function PerfInfoScreen(props) {
 
         useEffect(() => {
             fetchData(urlEval, setEvalData);
+            fetchData(urlMoyD, setMoyDData);
         }, []);
 
-        pond=[
-            {value: 40, text: '40%', color: ''}, //Exams #177AD5
-            {value: 25, text: '25%', color: ''}, //Tests #79D2DE
-            {value: 35, text: '35%', color: ''}, //Homework #ED6665
-        ]
+        desired = moyDData ? moyDData.moyenneSouhaitee : 0;
 
-        {/*NEED ID DE EVALUATION POUR FILTRER PONDERATION*/}
+        let avgPer = 0;
+        let avgWeight = 0;
 
         for (let i = 0; i < (evalData ? evalData.length : 0); i++) {
-            data[i] = {value: (evalData ? evalData[i].notePourcentage : 0), label: (evalData ? evalData[i].nomEvaluation : '')}
+            let color;
+            
+
+            if (evalData[i].idType_Evaluation == 1) { //Devoir
+                color = '#FF5733'
+            }
+            else if (evalData[i].idType_Evaluation == 2) { //Test
+                color = '#47C2FF'
+            }
+            else if (evalData[i].idType_Evaluation == 3) { //Projet
+                color = '#7FFF00'
+            }
+            else if (evalData[i].idType_Evaluation == 4) { //Presentation
+                color = '#FFD700'
+            }   
+            else if (evalData[i].idType_Evaluation == 5) { //Exercice
+                color = '#B03060'
+            }
+            else if (evalData[i].idType_Evaluation == 6) { //Quiz
+                color = '#00FA9A'
+            }
+            else if (evalData[i].idType_Evaluation == 7) { //Examin
+                color = '#9932CC'
+            }
+            else if (evalData[i].idType_Evaluation == 8) { //Autre
+                color = '#FF4500'
+            }
+
+            avgPer += evalData[i].ponderation * evalData[i].notePourcentage;
+
+            avgWeight += evalData[i].ponderation;
+
+            pond[i] = {value: evalData[i].ponderation, text: evalData[i].ponderation + '%', color: color}
+
+            data[i] = {value: evalData[i].notePourcentage, label: evalData[i].nomEvaluation}
         }
+
+        avgResult = avgPer / avgWeight;
+        avgResult = avgResult.toFixed(2);
     }
 
     return (
@@ -148,10 +191,10 @@ export default function PerfInfoScreen(props) {
                             <Text style={styles.contTitle}>Moyenne generale</Text>
                             <View style={styles.boxMoyInfo}>
                                 <View style={styles.moyGenerale}>
-                                    <Text style={styles.moyPour}>96.49%</Text>
+                                    <Text style={styles.moyPour}>{avgResult}%</Text>
                                 </View>
                                 <Text style={{fontWeight: 'bold'}}>Votre objectif:</Text>
-                                <Text>80%</Text>
+                                <Text>{desired}%</Text>
 
                                 <Text style={{fontWeight: 'bold'}}>Note de passage</Text>
                                 <Text>60%</Text>
