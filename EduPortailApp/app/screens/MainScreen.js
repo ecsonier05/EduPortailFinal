@@ -25,9 +25,9 @@ export default function MainScreen({ navigation }) {
     const [evalData, setEvalData] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    const urlClass = `http://192.168.2.81:3000/api/cours/${matriculeVar}`;
-    const urlSessionAct = `http://192.168.2.81:3000/api/sessionactuelle/${matriculeVar}`;
-    const urlEval = `http://192.168.2.81:3000/api/evaluations/${idInscription}`;
+    const urlClass = `http://192.168.56.1:3000/api/cours/${matriculeVar}`;
+    const urlSessionAct = `http://192.168.56.1:3000/api/sessionactuelle/${matriculeVar}`;
+    const urlEval = `http://192.168.56.1:3000/api/evaluations/${idInscription}`;
 
     useEffect(() => {
         fetchData(urlClass, setClassData);
