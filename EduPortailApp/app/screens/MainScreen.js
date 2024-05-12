@@ -27,18 +27,21 @@ export default function MainScreen({ navigation }) {
     const [classData, setClassData] = useState(null);
     const [sessionActData, setSessionActData] = useState(null);
     const [evalData, setEvalData] = useState(null);
+    const [retroData, setRetroData] = useState(null);
     const [loading, setLoading] = useState(true);
 
     // URLs for data fetching
     const urlClass = `http://192.168.56.1:3000/api/cours/${matriculeVar}`;
     const urlSessionAct = `http://192.168.56.1:3000/api/sessionactuelle/${matriculeVar}`;
     const urlEval = `http://192.168.56.1:3000/api/evaluations/matricule/${matriculeVar}`;
+    const urlRetro = `http://192.168.56.1:3000/api/evaluations/retroaction/${matriculeVar}`;
 
     // Fetch data from APIs
     useEffect(() => {
         fetchData(urlClass, setClassData);
         fetchData(urlSessionAct, setSessionActData);
         fetchData(urlEval, setEvalData);
+        fetchData(urlRetro, setRetroData);
     }, []);
 
     // Function to fetch data from API
@@ -89,38 +92,42 @@ export default function MainScreen({ navigation }) {
     }
 
     // Render recent evaluations
-const renderRecentEvals = () => {
-    const evalItems = [];
-    if (evalData) {
-        const recentEvals = evalData.slice(0, 3); // Take the first 3 evaluations
-        recentEvals.forEach((evaluation, index) => {
-            evalItems.push(
-                <View style={styles.evalRow} key={index}>
-                    <Text numberOfLines={1} style={styles.evalText}>{evaluation.sigle}</Text>
-                    <Text numberOfLines={1} style={styles.evalText}>{evaluation.nomEvaluation}</Text>
-                    <Text numberOfLines={1} style={styles.evalText}>{evaluation.notePourcentage.toFixed(2)}%</Text>
-                </View>
-            );
-        });
-    }
-    return evalItems;
-};
+    const renderRecentEvals = () => {
+        const evalItems = [];
+        if (evalData) {
+            const recentEvals = evalData.slice(0, 3); // Take the first 3 evaluations
+            recentEvals.forEach((evaluation, index) => {
+                evalItems.push(
+                    <View style={styles.evalRow} key={index}>
+                        <Text numberOfLines={1} style={styles.evalText}>{evaluation.sigle}</Text>
+                        <Text numberOfLines={1} style={styles.evalText}>{evaluation.nomEvaluation}</Text>
+                        <Text numberOfLines={1} style={styles.evalText}>{evaluation.notePourcentage.toFixed(2)}%</Text>
+                    </View>
+                );
+            });
+        }
+        return evalItems;
+    };
 
     // Render retro feedback
     const renderRetro = () => {
         const retroItems = [];
-        for (let i = 0; i < 3; i++) {
-            retroItems.push(
-                <View style={styles.retroRow} key={i}>
-                    <Text numberOfLines={1} style={styles.retroText}>SYST1036   Devoir 2 - Phase B - Partie 3</Text>
-                    <TouchableOpacity style={styles.retroButton} onPress={() => navigation.navigate('EvalClass', {id: "45b"})}>
-                        <Text style={styles.retroBtnText}>Voir Plus</Text>
-                    </TouchableOpacity>
-                </View>
-            );
+        if (retroData) {
+            const recentRetros = retroData.slice(0,3);
+            recentRetros.forEach((retroaction, index) => {
+                retroItems.push(
+                    <View style={styles.retroRow} key={index}>
+                        <Text numberOfLines={1} style={styles.retroText}>{retroaction.sigle}</Text>
+                        <Text numberOfLines={1} style={styles.retroText}>{retroaction.nomEvaluation}</Text>
+                        <TouchableOpacity style={styles.retroButton} onPress={() => navigation.navigate('EvalClass', {id: "45b"})}>
+                            <Text style={styles.retroBtnText}>Voir Plus</Text>
+                        </TouchableOpacity>
+                    </View>
+                );
+            });
         }
         return retroItems;
-    }
+    };
 
     // Calculate general average
     let moyGenerale = 86.50;
