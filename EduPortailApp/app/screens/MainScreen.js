@@ -98,7 +98,7 @@ const renderRecentEvals = () => {
                 <View style={styles.evalRow} key={index}>
                     <Text numberOfLines={1} style={styles.evalText}>{evaluation.sigle}</Text>
                     <Text numberOfLines={1} style={styles.evalText}>{evaluation.nomEvaluation}</Text>
-                    <Text numberOfLines={1} style={styles.evalText}>{evaluation.notePourcentage}%</Text>
+                    <Text numberOfLines={1} style={styles.evalText}>{evaluation.notePourcentage.toFixed(2)}%</Text>
                 </View>
             );
         });
