@@ -215,7 +215,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         top: windowHeight * 0.1,
         marginLeft: '10%',
-        fontSize: RFPercentage(2),
+        fontSize: RFPercentage(2.5),
     },
 
     //for circle with moyenne
