@@ -146,6 +146,8 @@ export default function PerfInfoScreen(props) {
             data[i] = {value: evalData[i].notePourcentage, label: evalData[i].nomEvaluation}
         }
 
+        pond = [...new Map(pond.map(v => [v.value, v])).values()]
+
         avgResult = avgPer / avgWeight;
         avgResult = avgResult.toFixed(2);
     }

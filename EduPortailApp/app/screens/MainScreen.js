@@ -116,7 +116,7 @@ export default function MainScreen({ navigation }) {
                     <View style={styles.retroRow} key={index}>
                         <Text numberOfLines={1} style={styles.retroText}>{retroaction.sigle}</Text>
                         <Text numberOfLines={1} style={styles.retroText}>{retroaction.nomEvaluation}</Text>
-                        <TouchableOpacity style={styles.retroButton} onPress={() => navigation.navigate('EvalClass', { id: "45b" })}>
+                        <TouchableOpacity style={styles.retroButton} onPress={() => navigation.navigate('EvalClass', { id: 2 })}>
                             <Text style={styles.retroBtnText}>Voir Plus</Text>
                         </TouchableOpacity>
                     </View>
@@ -240,18 +240,18 @@ return (
                         <Text style={styles.contTitle}>Force</Text>
                         <View style={styles.boxForceInfo}>
                             <View style={[styles.moyForce, { backgroundColor: backgroundColorForce() }]}>
-                                <Text style={styles.forcePour}>{forceMoyenne}%</Text>
+                                <Text style={styles.forcePour}>89.72%</Text>
                             </View>
-                            <Text style={styles.moyForceText}>{coursForceMoyenne}</Text>
+                            <Text style={styles.moyForceText}>PROG1301</Text>
                         </View>
                     </View>
                     <View style={styles.boxFaiblesse}>
                         <Text style={styles.contTitle}>Faiblesse</Text>
                         <View style={styles.boxFaiblesseInfo}>
                             <View style={[styles.moyFaiblesse, { backgroundColor: backgroundColorFaiblesse() }]}>
-                                <Text style={styles.forcePour}>67.26%</Text>
+                                <Text style={styles.forcePour}>84.27%</Text>
                             </View>
-                            <Text style={styles.moyFaiblesseText}>PROG1206</Text>
+                            <Text style={styles.moyFaiblesseText}>PROG1342</Text>
                         </View>
                     </View>
                 </View>
