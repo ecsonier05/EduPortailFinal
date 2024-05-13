@@ -13,7 +13,7 @@ export default function PerfInfoScreen(props) {
     const matriculeVar = 2051798;
 
     let desired = 0;
-    const obtained = 85.72;
+    let obtained = 0;
 
     let data = [];
     let pond = [];
@@ -23,11 +23,15 @@ export default function PerfInfoScreen(props) {
     
 
     const [evalData, setEvalData] = useState(null);
+    const [evalTotalData, setEvalTotalData] = useState(null);
+    const [classData, setClassData] = useState(null);
     const [moyDData, setMoyDData] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    const urlEval = `http://192.168.56.1:3000/api/evaluations/${idInscription}`;
-    const urlMoyD = `http://192.168.56.1:3000/api/moyenneSouhaitee/2051798`;
+    const urlEval = `http://192.168.56.1:3000/api/evaluations/inscription/${idInscription}`;
+    const urlEvalTotal = `http://192.168.56.1:3000/api/evaluations/matricule/${matriculeVar}`;
+    const urlClass = `http://192.168.56.1:3000/api/cours/${matriculeVar}`;
+    const urlMoyD = `http://192.168.56.1:3000/api/moyenneSouhaitee/${matriculeVar}`;
 
     const fetchData = (url, setData) => {
         fetch(url)
@@ -43,13 +47,55 @@ export default function PerfInfoScreen(props) {
     };
 
     if(mode == 'moy'){
-        data=[ 
-            {value: 75, label: 'PROG1296'},
-            {value: 40, label: 'PROG1294'},
-            {value: 90, label: 'PROG1341'},
-            {value: 100, label: 'PROG1300'},
-            {value: 65, label: 'SYST1037'}  
-        ]
+
+        useEffect(() => {
+            fetchData(urlEvalTotal, setEvalTotalData);
+            fetchData(urlMoyD, setMoyDData);
+            fetchData(urlClass, setClassData);
+        }, []);
+
+        desired = moyDData ? moyDData.moyenneSouhaitee : 0;
+
+        let totalScore = 0;
+        let totalCourses = 0;
+
+        if (evalTotalData) {
+            evalTotalData.forEach(evaluation => {
+                if (evaluation.notePourcentage) {
+                    totalScore += evaluation.notePourcentage;
+                    totalCourses++;
+                }
+            });
+        }
+
+        obtained = totalCourses > 0 ? totalScore / totalCourses : 0;
+        obtained = obtained.toFixed(2);
+
+
+        for (let i = 0; i < (classData ? classData.length : 0); i++) {
+
+            let avgPer = 0;
+            let avgWeight = 0;
+
+            for (let j = 0; j < (evalTotalData ? evalTotalData.length : 0); j++) {
+
+                if ((evalTotalData ? evalTotalData[j].sigle : null) == (classData ? classData[i].sigle : '')) {
+
+                    avgPer += (evalTotalData[j].ponderation) * (evalTotalData[j].notePourcentage);
+
+                    avgWeight += evalTotalData[j].ponderation;
+
+                }
+
+                avgResult = avgPer / avgWeight;
+                avgResult = avgResult.toFixed(2);
+
+            }
+
+            data[i] = {value: avgResult, label: classData[i].sigle};
+            
+        }
+
     } else {
 
         useEffect(() => {
@@ -123,10 +169,10 @@ export default function PerfInfoScreen(props) {
 
                     <View style={styles.moyCheckContainer}>
                         <Text style={styles.goalLabel}>Moyenne generale souhaitee: </Text>
-                        <Text style={styles.goalText}>{desired}</Text>
+                        <Text style={styles.goalText}>{desired}%</Text>
 
                         <Text style={styles.currentLabel}>Moyenne generale obtenu(session H2023): </Text>
-                        <Text style={styles.currentText}>{obtained}</Text>
+                        <Text style={styles.currentText}>{obtained}%</Text>
 
                         {desired < obtained ? (
                             <View style={styles.desiredResultContainer}>
@@ -172,19 +218,20 @@ export default function PerfInfoScreen(props) {
                                 data = {pond}  
                             />
                             <Text style={{fontSize: 17, paddingTop: 5}}>
-                                <Text style={{color: '#177AD5'}}>■</Text><Text> Devoir</Text>
-                                <Text style={{color: '#79D2DE'}}> ■</Text><Text> Test </Text>
-                                <Text style={{color: '#ED6665'}}>■</Text><Text> Projet</Text>
-                            </Text>
-                            {/*add missing components*/}
-                            <Text style={{fontSize: 17}}>
-                                <Text>■</Text><Text> Presentation</Text>
-                                <Text>■</Text><Text> Exercice </Text>
-                                <Text>■</Text><Text> Quiz</Text>
+                                <Text style={{color: '#FF5733'}}>■</Text><Text>Devoir</Text>
+                                <Text style={{color: '#47C2FF'}}>■</Text><Text>Test</Text>
                             </Text>
                             <Text style={{fontSize: 17}}>
-                                <Text>■</Text><Text> Examen</Text>
-                                <Text>■</Text><Text> Autre </Text>
+                                <Text style={{color: '#7FFF00'}}>■</Text><Text>Projet</Text>
+                                <Text style={{color: '#FFD700'}}>■</Text><Text>Presentation</Text>
+                            </Text>
+                            <Text style={{fontSize: 17}}>
+                                <Text style={{color: '#B03060'}}>■</Text><Text>Exercice </Text>
+                                <Text style={{color: '#00FA9A'}}>■</Text><Text>Quiz</Text>
+                            </Text>
+                            <Text style={{fontSize: 17}}>
+                                <Text style={{color: '#9932CC'}}>■</Text><Text>Examen</Text>
+                                <Text style={{color: '#FF4500'}}>■</Text><Text>Autre</Text>
                             </Text>
                         </View>
                         <View style={styles.boxMoyenne}>
