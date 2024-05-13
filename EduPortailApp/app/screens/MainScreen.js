@@ -23,6 +23,7 @@ export default function MainScreen({ navigation }) {
     const [classData, setClassData] = useState(null);
     const [sessionActData, setSessionActData] = useState(null);
     const [evalData, setEvalData] = useState(null);
+    const [evalTotalData, setEvalTotalData] = useState(null);
     const [retroData, setRetroData] = useState(null);
     const [moyenneSouhaiteeData, setMoyenneSouhaiteeData] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -30,6 +31,7 @@ export default function MainScreen({ navigation }) {
     const urlClass = `http://192.168.56.1:3000/api/cours/${matriculeVar}`;
     const urlSessionAct = `http://192.168.56.1:3000/api/sessionactuelle/${matriculeVar}`;
     const urlEval = `http://192.168.56.1:3000/api/evaluations/matricule/${matriculeVar}`;
+    const urlEvalTotal = `http://192.168.56.1:3000/api/evaluations/inscription/${idInscription}`;
     const urlRetro = `http://192.168.56.1:3000/api/evaluations/retroaction/${matriculeVar}`;
     const urlMoyenneSouhaitee = `http://192.168.56.1:3000/api/moyenneSouhaitee/${matriculeVar}`;
 
@@ -37,6 +39,7 @@ export default function MainScreen({ navigation }) {
         fetchData(urlClass, setClassData);
         fetchData(urlSessionAct, setSessionActData);
         fetchData(urlEval, setEvalData);
+        fetchData(urlEvalTotal, setEvalTotalData);
         fetchData(urlRetro, setRetroData);
         fetchData(urlMoyenneSouhaitee, setMoyenneSouhaiteeData);
     }, []);
@@ -148,65 +151,114 @@ export default function MainScreen({ navigation }) {
         }
     };
 
+    let forceMoyenne = 0;
+    let coursForceMoyenne = '';
+
+    if (evalTotalData) {
+        evalTotalData.forEach(cours => {
+            let average = 0;
+            let totalScore = 0;
+            let totalCours = 0;
+
+            // Calculate average for each cours
+            cours.evaluations.forEach(evaluation => {
+                if (evaluation.notePourcentage) {
+                    totalScore += evaluation.notePourcentage;
+                    totalCours++;
+                }
+            });
+
+            if (totalCours > 0) {
+                average = totalScore / totalCours;
+            }
+
+            // Update forceMoyenne if the average of this cours is higher
+            if (average > forceMoyenne) {
+                forceMoyenne = average;
+                coursForceMoyenne = cours.sigle;
+            }
+        });
+    }
+
+    const backgroundColorForce = () => {
+        if (moyenneSouhaiteeData && forceMoyenne >= moyenneSouhaiteeData.moyenneSouhaitee) {
+            return '#7ac25a';
+        } else if (forceMoyenne >= 60) {
+            return '#f1c232';
+        } else {
+            return '#ff4137';
+        }
+    };
+
+    const backgroundColorFaiblesse = () => {
+        if (moyenneSouhaiteeData && forceMoyenne < moyenneSouhaiteeData.moyenneSouhaitee) {
+            return '#7ac25a';
+        } else if (forceMoyenne < 60) {
+            return '#f1c232';
+        } else {
+            return '#ff4137';
+        }
+    };
+
     // JSX rendering
-    return (
-        <View style={styles.container}>
-            {moyenneSouhaiteeData && (
-                <>
-                    {/* Section titre */}
-                    <View style={styles.titleContainer}>
-                        <TouchableOpacity onPress={() => navigation.navigate('Profil')}>
-                            <Image source={require("../assets/alexandreRoy.jpg")} style={styles.profileIcon} />
-                        </TouchableOpacity>
-                        <Text style={styles.titleText}>Ma moyenne générale</Text>
-                        <Text style={styles.sessionText}>{"Session:\n Printemps 2024"}</Text>
-                    </View>
+return (
+    <View style={styles.container}>
+        {moyenneSouhaiteeData && (
+            <>
+                {/* Section titre */}
+                <View style={styles.titleContainer}>
+                    <TouchableOpacity onPress={() => navigation.navigate('Profil')}>
+                        <Image source={require("../assets/alexandreRoy.jpg")} style={styles.profileIcon} />
+                    </TouchableOpacity>
+                    <Text style={styles.titleText}>Ma moyenne générale</Text>
+                    <Text style={styles.sessionText}>{sessionActData ? sessionActData.nomSession : ''}</Text>
+                </View>
 
-                    {/* Moyenne générale */}
-                    <View style={[styles.moyenneContainer, { backgroundColor: backgroundColorMoyenneGenerale(parseFloat(moyGenerale), moyenneSouhaiteeData) }]}>
-                        <Text style={styles.moyenneText}>{moyGenerale}%</Text>
-                    </View>
+                {/* Moyenne générale */}
+                <View style={[styles.moyenneContainer, { backgroundColor: backgroundColorMoyenneGenerale(parseFloat(moyGenerale), moyenneSouhaiteeData) }]}>
+                    <Text style={styles.moyenneText}>{moyGenerale}%</Text>
+                </View>
 
-                    {/* Évaluations récentes */}
-                    <View style={styles.evalContainer}>
-                        <Text style={styles.contTitle}>Notes d'évaluation récentes</Text>
-                        {renderRecentEvals()}
-                        <TouchableOpacity style={styles.evalButton} onPress={() => navigation.navigate('Évaluations')}>
-                            <Text style={styles.evalBtnText}>Voir Plus</Text>
-                        </TouchableOpacity>
-                    </View>
+                {/* Évaluations récentes */}
+                <View style={styles.evalContainer}>
+                    <Text style={styles.contTitle}>Notes d'évaluation récentes</Text>
+                    {renderRecentEvals()}
+                    <TouchableOpacity style={styles.evalButton} onPress={() => navigation.navigate('Évaluations')}>
+                        <Text style={styles.evalBtnText}>Voir Plus</Text>
+                    </TouchableOpacity>
+                </View>
 
-                    <View style={styles.retroContainer}>
-                        <Text style={styles.contTitle}>Rétroactions récentes</Text>
-                        {/*add function to pressable*/}
-                        {renderRetro()}
-                    </View>
+                <View style={styles.retroContainer}>
+                    <Text style={styles.contTitle}>Rétroactions récentes</Text>
+                    {/*add function to pressable*/}
+                    {renderRetro()}
+                </View>
 
-                    {/*backend code to check the highest and lowest grades*/}
-                    <View style={styles.forceFaiblesseContainer}>
-                        <View style={styles.boxForce}>
-                            <Text style={styles.contTitle}>Force</Text>
-                            <View style={styles.boxForceInfo}>
-                                <View style={styles.moyForce}>
-                                    <Text style={styles.forcePour}>96.49%</Text>
-                                </View>
-                                <Text style={styles.moyForceText}>PROG1206</Text>
+                {/*backend code to check the highest and lowest grades*/}
+                <View style={styles.forceFaiblesseContainer}>
+                    <View style={styles.boxForce}>
+                        <Text style={styles.contTitle}>Force</Text>
+                        <View style={styles.boxForceInfo}>
+                            <View style={[styles.moyForce, { backgroundColor: backgroundColorForce() }]}>
+                                <Text style={styles.forcePour}>{forceMoyenne}%</Text>
                             </View>
-                        </View>
-                        <View style={styles.boxFaiblesse}>
-                            <Text style={styles.contTitle}>Faiblesse</Text>
-                            <View style={styles.boxFaiblesseInfo}>
-                                <View style={styles.moyFaiblesse}>
-                                    <Text style={styles.forcePour}>67.26%</Text>
-                                </View>
-                                <Text style={styles.moyFaiblesseText}>PROG1206</Text>
-                            </View>
+                            <Text style={styles.moyForceText}>{coursForceMoyenne}</Text>
                         </View>
                     </View>
-                </>
-            )}
-        </View>
-    );
+                    <View style={styles.boxFaiblesse}>
+                        <Text style={styles.contTitle}>Faiblesse</Text>
+                        <View style={styles.boxFaiblesseInfo}>
+                            <View style={[styles.moyFaiblesse, { backgroundColor: backgroundColorFaiblesse() }]}>
+                                <Text style={styles.forcePour}>67.26%</Text>
+                            </View>
+                            <Text style={styles.moyFaiblesseText}>PROG1206</Text>
+                        </View>
+                    </View>
+                </View>
+            </>
+        )}
+    </View>
+);
 }
 
 const styles = StyleSheet.create({
