@@ -71,29 +71,33 @@ export default function PerfInfoScreen(props) {
         obtained = totalCourses > 0 ? totalScore / totalCourses : 0;
         obtained = obtained.toFixed(2);
 
+        if(evalTotalData) {
+            for (let i = 0; i < (classData ? classData.length : 0); i++) {
 
-        for (let i = 0; i < (classData ? classData.length : 0); i++) {
+                let avgPer = 0;
+                let avgWeight = 0;
 
-            let avgPer = 0;
-            let avgWeight = 0;
+                for (let j = 0; j < (evalTotalData ? evalTotalData.length : 0); j++) {
 
-            for (let j = 0; j < (evalTotalData ? evalTotalData.length : 0); j++) {
+                    if ((evalTotalData ? evalTotalData[j].sigle : null) == (classData ? classData[i].sigle : '')) {
 
-                if ((evalTotalData ? evalTotalData[j].sigle : null) == (classData ? classData[i].sigle : '')) {
+                        avgPer += evalTotalData[j].ponderation * evalTotalData[j].notePourcentage;
 
-                    avgPer += (evalTotalData[j].ponderation) * (evalTotalData[j].notePourcentage);
+                        avgWeight += evalTotalData[j].ponderation;
 
-                    avgWeight += evalTotalData[j].ponderation;
+                    }
+
+                    avgResult = avgPer / avgWeight;
+                    avgResult = avgResult.toFixed(2);
 
                 }
 
-                avgResult = avgPer / avgWeight;
-                avgResult = avgResult.toFixed(2);
+                let sigleNo = classData[i].sigle;
+                sigleNo = sigleNo.substring(5);
 
+                data[i] = {value: avgResult, label: sigleNo};
+                
             }
-
-            data[i] = {value: avgResult, label: classData[i].sigle};
-            
         }
 
     } else {
