@@ -9,6 +9,7 @@ export default function LoginScreen({ navigation }) {
             <Image 
                 source={require("../assets/EduPortailLogo.png")}
                 style={styles.loginIcon}
+                rezideMode="center"
             />
 
             <Text style={styles.connectText}>Connection</Text>
@@ -55,10 +56,11 @@ const styles = StyleSheet.create({
         top: 80
     },
     loginIcon: {
-        width: 200,
-        height: 220,
+        width: 240,
+        height: 240,
         position: 'absolute',
-        top: 160
+        top: 160,
+        borderRadius: 120
     },
     connectText: {
         fontSize: 30,

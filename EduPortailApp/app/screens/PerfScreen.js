@@ -6,7 +6,7 @@ import { RadioButton } from 'react-native-paper';
 function PerfScreen({ navigation }) {
 
     //Radio Buttons
-    const [courChecked, setCourChecked] = React.useState('un');
+    const [courChecked, setCourChecked] = React.useState(1);
     const [resultChecked, setResultChecked] = React.useState('moy');
 
     const matriculeVar = 2051798;
@@ -206,7 +206,7 @@ const styles = StyleSheet.create({
         height: 130,
         borderRadius: 5,
         position: 'absolute',
-        top: 395,
+        top: '47%',
     },
     resultRadioButtons: {
         marginVertical: 0.5,
@@ -221,10 +221,10 @@ const styles = StyleSheet.create({
     coursContainer: {
         backgroundColor: '#adcbe3',
         width: '90%',
-        height: 110,
+        height: 125,
         borderRadius: 5,
         position: 'absolute',
-        top: 530,
+        top: '64%',
     },
     checkContainer: {
         marginLeft: 5
@@ -250,7 +250,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         position: 'absolute',
-        top: 645,
+        top: '79.5%',
     },
     submitText: {
         color: 'white',

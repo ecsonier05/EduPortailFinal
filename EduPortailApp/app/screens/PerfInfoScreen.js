@@ -287,7 +287,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         top: 325,
         width: '90%',
-        height: 250,
+        height: 350,
         alignItems: 'center',
         borderRadius: 5
     },
@@ -355,7 +355,7 @@ const styles = StyleSheet.create({
     //Ponderation
     pondMoyContainer: {
         width: '90%',
-        height: 225,
+        height: 275,
         position: 'absolute',
         top: 445,
         flexDirection: 'row',
