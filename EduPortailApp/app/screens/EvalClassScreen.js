@@ -4,9 +4,6 @@ import { useRoute } from "@react-navigation/native";
 import { Dropdown } from 'react-native-element-dropdown';
 
 export default function EvalClassScreen(props) {
-
-    
-
     const route = useRoute();
     const idInscription = route.params?.id;
 
@@ -17,7 +14,7 @@ export default function EvalClassScreen(props) {
     const [sessionActData, setSessionActData] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    const urlEval = `http://192.168.56.1:3000/api/evaluations/${idInscription}`;
+    const urlEval = `http://192.168.56.1:3000/api/evaluations/inscription/${idInscription}`;
     const urlClass = `http://192.168.56.1:3000/api/cours/${matriculeVar}`;
     const urlSessionAct = `http://192.168.56.1:3000/api/sessionactuelle/${matriculeVar}`;
 
@@ -56,14 +53,23 @@ export default function EvalClassScreen(props) {
         }
     }
 
-    const renderList = () => {
+    const backgroundColor = (percentage) => {
+        if (percentage && percentage >= 60) {
+            return '#ccffcc';
+        } else {
+            return '#ffcccc';
+        }
+    };
 
+    const renderList = () => {
         const listItems = [];
 
         for (let i = 0; i < (evalData ? evalData.length : 0); i++) {
+            const listItemBackgroundColor = backgroundColor(evalData ? evalData[i].notePourcentage : null);
+
             listItems.push(
-                <View style={styles.testListItems} key={i}>
-                    <Text style={styles.testDate}>{evalData ? evalData[i].datePublication.substring(0,10) : ''}</Text>
+                <View style={[styles.testListItems, { backgroundColor: listItemBackgroundColor }]} key={i}>
+                    <Text style={styles.testDate}>{evalData ? evalData[i].datePublication.substring(0, 10) : ''}</Text>
                     <Text style={styles.evalType}>{evalData ? evalData[i].nomEvaluation : ''}</Text>
                     <Text style={styles.grade}>{evalData ? evalData[i].notePointage : ''}/{evalData ? evalData[i].pointage : ''} - {evalData ? evalData[i].notePourcentage : ''}%</Text>
                     <View style={styles.buttonContainer}>
@@ -76,14 +82,13 @@ export default function EvalClassScreen(props) {
                                 <Text style={styles.retroText}>Voir retro</Text>
                             </TouchableOpacity>
                         )}
-                        
                     </View>
                 </View>
             );
         }
 
         return listItems;
-    }
+    };
 
     //Drop Down List
     const selectedSort = [
@@ -95,6 +100,8 @@ export default function EvalClassScreen(props) {
 
     const [value, setValue] = useState(null);
     const [isFocus, setIsFocus] = useState(false);
+
+    const pass = true;
 
     return (
         <View style={styles.mainContainer}>
@@ -109,10 +116,9 @@ export default function EvalClassScreen(props) {
                 </Text>
 
                 <View style={styles.classInfoContainer}>
-                    <Text style={{fontSize: 20}}>Session: {sessionActData ? sessionActData.nomSession : ''}</Text>
-                    <Text style={{fontSize: 20}}>Enseignant: Joel Boudreau</Text>
+                    <Text style={{fontSize: 18}}>Session: {sessionActData ? sessionActData.nomSession : ''}</Text>
+                    <Text style={{fontSize: 18}}>Enseignant: Joel Boudreau</Text>
                 </View>
-
 
                 <View style={styles.filterContainer}>
                     <Text>Trier par</Text>
@@ -143,7 +149,7 @@ export default function EvalClassScreen(props) {
                 </View>
             </View>
             )}
-        </View>  
+        </View>
     );
 }
 
@@ -171,7 +177,7 @@ const styles = StyleSheet.create({
     },
     classInfoContainer: {
         position: 'absolute',
-        top: '11%',
+        top: '20%',
         left: '6%',
     },
     filterContainer: {
@@ -179,7 +185,7 @@ const styles = StyleSheet.create({
         height: 60,
         borderRadius: 5,
         position: 'absolute',
-        top: '18%',
+        top: '30%',
     },
     dropdown: {
         height: 25,
@@ -192,7 +198,8 @@ const styles = StyleSheet.create({
     },
     testsListContainer: {
         position: 'absolute',
-        top: '30%',
+        top: '40%',
+        left: '5%',
         width: '90%',
         height: '65%'
     },
