@@ -183,7 +183,7 @@ export default function MainScreen({ navigation }) {
 
     // Couleur du cercle pour le cours fort
     const backgroundColorForce = () => {
-        if (moyenneSouhaiteeData && moyenneForce.averageGrade >= moyenneSouhaiteeData.moyenneSouhaitee) {
+        if (moyenneForce && moyenneSouhaiteeData && moyenneForce.averageGrade >= moyenneSouhaiteeData.moyenneSouhaitee) {
             return '#7ac25a';
         } else if (moyenneSouhaiteeData && moyenneForce.averageGrade >= 60) {
             return '#f1c232';
@@ -194,7 +194,7 @@ export default function MainScreen({ navigation }) {
 
     // Couleur du cercle pour le cours faible
     const backgroundColorFaiblesse = () => {
-        if (moyenneSouhaiteeData && moyenneFaiblesse >= moyenneSouhaiteeData.moyenneSouhaitee) {
+        if (moyenneFaiblesse && moyenneSouhaiteeData && moyenneFaiblesse.averageGrade >= moyenneSouhaiteeData.moyenneSouhaitee) {
             return '#7ac25a';
         } else if (moyenneSouhaiteeData && moyenneFaiblesse.averageGrade >= 60) {
             return '#f1c232';
