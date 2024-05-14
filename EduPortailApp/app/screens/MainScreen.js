@@ -30,24 +30,25 @@ export default function MainScreen({ navigation }) {
 
 
     // Liens BD locale     /* Pour trouver l'adresse ip de votre machine, cmd: ipconfig (choisir IPv4 Address sous Connection-specific DNS suffix) */
-    /*
+
     const urlClass = `http://192.168.56.1:3000/api/cours/${matriculeVar}`;
     const urlSessionAct = `http://192.168.56.1:3000/api/sessionactuelle/${matriculeVar}`;
     const urlEval = `http://192.168.56.1:3000/api/evaluations/matricule/${matriculeVar}`;
     const urlEvalTotal = `http://192.168.56.1:3000/api/evaluations/inscription/${idInscription}`;
     const urlRetro = `http://192.168.56.1:3000/api/evaluations/retroaction/${matriculeVar}`;
     const urlMoyenneSouhaitee = `http://192.168.56.1:3000/api/moyenneSouhaitee/${matriculeVar}`;
-    */
+
 
     //Liens BD remote
 
+    /*
     const urlClass = `https://eduportail-69af4de32dad.herokuapp.com/api/cours/${matriculeVar}`;
     const urlSessionAct = `https://eduportail-69af4de32dad.herokuapp.com/api/sessionactuelle/${matriculeVar}`;
     const urlEval = `https://eduportail-69af4de32dad.herokuapp.com/api/evaluations/matricule/${matriculeVar}`;
     const urlEvalTotal = `https://eduportail-69af4de32dad.herokuapp.com/api/evaluations/inscription/${idInscription}`;
     const urlRetro = `https://eduportail-69af4de32dad.herokuapp.com/api/evaluations/retroaction/${matriculeVar}`;
     const urlMoyenneSouhaitee = `https://eduportail-69af4de32dad.herokuapp.com/api/moyenneSouhaitee/${matriculeVar}`;
-
+    */
 
     useEffect(() => {
         fetchData(urlClass, setClassData);

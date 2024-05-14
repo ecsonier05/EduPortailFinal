@@ -33,17 +33,18 @@ export default function ProfileScreen(props) {
 
 
     // Liens BD locale
-    /*
+
     const urlEtudiant = `http://192.168.56.1:3000/api/etudiants/${matriculeVar}`;
     const urlProgramme = `http://192.168.56.1:3000/api/programmes/${matriculeVar}`;
     const urlMoyenneSouhaitee = `http://192.168.56.1:3000/api/moyenneSouhaitee/${matriculeVar}`;
-    */
+
 
     // Liens BD remote
-
+    /*
     const urlEtudiant = `https://eduportail-69af4de32dad.herokuapp.com/api/etudiants/${matriculeVar}`;
     const urlProgramme = `https://eduportail-69af4de32dad.herokuapp.com/api/programmes/${matriculeVar}`;
     const urlMoyenneSouhaitee = `https://eduportail-69af4de32dad.herokuapp.com/api/moyenneSouhaitee/${matriculeVar}`;
+    */
 
 
     useEffect(() => {
