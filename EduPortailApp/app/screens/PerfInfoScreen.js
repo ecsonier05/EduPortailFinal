@@ -322,7 +322,7 @@ const styles = StyleSheet.create({
     },
     currentText: {
         fontSize: 30,
-        color: 'lime',
+        color: 'green',
     },
     desiredResultContainer: {
         backgroundColor: 'white',

@@ -141,7 +141,7 @@ export default function EvalClassScreen(props) {
                         data={selectedSort}
                         labelField="label"
                         valueField="value"
-                        placeholder={!isFocus ? 'Select item' : '...'}
+                        placeholder={!isFocus ? 'Sélectionnez une option de filtre' : '...'}
                         searchPlaceholder="Search..."
                         value={value}
                         onFocus={() => setIsFocus(true)}
