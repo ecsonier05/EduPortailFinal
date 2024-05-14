@@ -26,6 +26,8 @@ export default function MainScreen({ navigation }) {
     const [evalTotalData, setEvalTotalData] = useState(null);
     const [retroData, setRetroData] = useState(null);
     const [moyenneSouhaiteeData, setMoyenneSouhaiteeData] = useState(null);
+    const [moyenneForce, setMoyenneForce] = useState(null);
+    const [moyenneFaiblesse, setMoyenneFaiblesse] = useState(null);
     const [loading, setLoading] = useState(true);
 
 
@@ -33,8 +35,10 @@ export default function MainScreen({ navigation }) {
 
     const urlClass = `http://192.168.56.1:3000/api/cours/${matriculeVar}`;
     const urlSessionAct = `http://192.168.56.1:3000/api/sessionactuelle/${matriculeVar}`;
-    const urlEval = `http://192.168.56.1:3000/api/evaluations/matricule/${matriculeVar}`;
-    const urlEvalTotal = `http://192.168.56.1:3000/api/evaluations/inscription/${idInscription}`;
+    const urlEvalTotal = `http://192.168.56.1:3000/api/evaluations/matricule/${matriculeVar}`;
+    const urlEval = `http://192.168.56.1:3000/api/evaluations/inscription/${idInscription}`;
+    const urlEvalForce = `http://192.168.56.1:3000/api/evaluations/force`;
+    const urlEvalFaiblesse = `http://192.168.56.1:3000/api/evaluations/faiblesse`;
     const urlRetro = `http://192.168.56.1:3000/api/evaluations/retroaction/${matriculeVar}`;
     const urlMoyenneSouhaitee = `http://192.168.56.1:3000/api/moyenneSouhaitee/${matriculeVar}`;
 
@@ -44,8 +48,10 @@ export default function MainScreen({ navigation }) {
     /*
     const urlClass = `https://eduportail-69af4de32dad.herokuapp.com/api/cours/${matriculeVar}`;
     const urlSessionAct = `https://eduportail-69af4de32dad.herokuapp.com/api/sessionactuelle/${matriculeVar}`;
-    const urlEval = `https://eduportail-69af4de32dad.herokuapp.com/api/evaluations/matricule/${matriculeVar}`;
-    const urlEvalTotal = `https://eduportail-69af4de32dad.herokuapp.com/api/evaluations/inscription/${idInscription}`;
+    const urlEval = `https://eduportail-69af4de32dad.herokuapp.com/api/evaluations/inscription/${idInscription}`;
+    const urlEvalTotal = `https://eduportail-69af4de32dad.herokuapp.com/api/evaluations/matricule/${matriculeVar}`;
+    const urlEvalForce = `http://192.168.56.1:3000/api/evaluations/force`;
+    const urlEvalFaiblesse = `http://192.168.56.1:3000/api/evaluations/faiblesse`;
     const urlRetro = `https://eduportail-69af4de32dad.herokuapp.com/api/evaluations/retroaction/${matriculeVar}`;
     const urlMoyenneSouhaitee = `https://eduportail-69af4de32dad.herokuapp.com/api/moyenneSouhaitee/${matriculeVar}`;
     */
@@ -55,6 +61,8 @@ export default function MainScreen({ navigation }) {
         fetchData(urlSessionAct, setSessionActData);
         fetchData(urlEval, setEvalData);
         fetchData(urlEvalTotal, setEvalTotalData);
+        fetchData(urlEvalForce, setMoyenneForce);
+        fetchData(urlEvalFaiblesse, setMoyenneFaiblesse);
         fetchData(urlRetro, setRetroData);
         fetchData(urlMoyenneSouhaitee, setMoyenneSouhaiteeData);
     }, []);
@@ -84,10 +92,10 @@ export default function MainScreen({ navigation }) {
     }
 
     const findNomEval = () => {
-        if (evalData) {
-            for (let i = 0; i < 3 && i < evalData.length; i++) {
-                if (evalData[i].idInscription === idInscription) {
-                    return evalData[i].nomEvaluation || '';
+        if (evalTotalData) {
+            for (let i = 0; i < 3 && i < evalTotalData.length; i++) {
+                if (evalTotalData[i].idInscription === idInscription) {
+                    return evalTotalData[i].nomEvaluation || '';
                 }
             }
         }
@@ -107,8 +115,8 @@ export default function MainScreen({ navigation }) {
 
     const renderRecentEvals = () => {
         const evalItems = [];
-        if (evalData) {
-            const recentEvals = evalData.slice(0, 3);
+        if (evalTotalData) {
+            const recentEvals = evalTotalData.slice(0, 3);
             recentEvals.forEach((evaluation, index) => {
                 evalItems.push(
                     <View style={styles.evalRow} key={index}>
@@ -141,21 +149,28 @@ export default function MainScreen({ navigation }) {
         return retroItems;
     };
 
-    let totalScore = 0;
-    let totalCourses = 0;
 
-    if (evalData) {
-        evalData.forEach(evaluation => {
-            if (evaluation.notePourcentage) {
-                totalScore += evaluation.notePourcentage;
-                totalCourses++;
-            }
-        });
-    }
+    // Calcul de la moyenne générale
+    const calculeMoyenneGenerale = (evalTotalData) => {
+        let totalScore = 0;
+        let totalCours = 0;
 
-    let moyGenerale = totalCourses > 0 ? totalScore / totalCourses : 0;
-    moyGenerale = moyGenerale.toFixed(2);
+        if (evalTotalData) {
+            evalTotalData.forEach(evaluation => {
+                if (evaluation.notePourcentage) {
+                    totalScore += evaluation.notePourcentage;
+                    totalCours++;
+                }
+            });
+        }
 
+        return totalCours > 0 ? (totalScore / totalCours).toFixed(2) : 'N/A';
+    };
+
+    const moyGenerale = calculeMoyenneGenerale(evalTotalData);
+
+
+    // Couleur du cercle pour la moyenne
     const backgroundColorMoyenneGenerale = (moyGenerale, moyenneSouhaiteeData) => {
         if (moyenneSouhaiteeData && moyGenerale >= moyenneSouhaiteeData.moyenneSouhaitee) {
             return '#7ac25a';
@@ -166,49 +181,22 @@ export default function MainScreen({ navigation }) {
         }
     };
 
-    let forceMoyenne = 0;
-    let coursForceMoyenne = '';
-
-    if (evalTotalData) {
-        evalTotalData.forEach(cours => {
-            let average = 0;
-            let totalScore = 0;
-            let totalCours = 0;
-
-            // Calculate average for each cours
-            cours.evaluations.forEach(evaluation => {
-                if (evaluation.notePourcentage) {
-                    totalScore += evaluation.notePourcentage;
-                    totalCours++;
-                }
-            });
-
-            if (totalCours > 0) {
-                average = totalScore / totalCours;
-            }
-
-            // Update forceMoyenne if the average of this cours is higher
-            if (average > forceMoyenne) {
-                forceMoyenne = average;
-                coursForceMoyenne = cours.sigle;
-            }
-        });
-    }
-
+    // Couleur du cercle pour le cours fort
     const backgroundColorForce = () => {
-        if (moyenneSouhaiteeData && forceMoyenne >= moyenneSouhaiteeData.moyenneSouhaitee) {
+        if (moyenneSouhaiteeData && moyenneForce.averageGrade >= moyenneSouhaiteeData.moyenneSouhaitee) {
             return '#7ac25a';
-        } else if (forceMoyenne >= 60) {
+        } else if (moyenneSouhaiteeData && moyenneForce.averageGrade >= 60) {
             return '#f1c232';
         } else {
             return '#ff4137';
         }
     };
 
+    // Couleur du cercle pour le cours faible
     const backgroundColorFaiblesse = () => {
-        if (moyenneSouhaiteeData && forceMoyenne < moyenneSouhaiteeData.moyenneSouhaitee) {
+        if (moyenneSouhaiteeData && moyenneFaiblesse >= moyenneSouhaiteeData.moyenneSouhaitee) {
             return '#7ac25a';
-        } else if (forceMoyenne < 60) {
+        } else if (moyenneSouhaiteeData && moyenneFaiblesse.averageGrade >= 60) {
             return '#f1c232';
         } else {
             return '#ff4137';
@@ -245,28 +233,26 @@ return (
 
                 <View style={styles.retroContainer}>
                     <Text style={styles.contTitle}>Rétroactions récentes</Text>
-                    {/*add function to pressable*/}
                     {renderRetro()}
                 </View>
 
-                {/*backend code to check the highest and lowest grades*/}
                 <View style={styles.forceFaiblesseContainer}>
                     <View style={styles.boxForce}>
                         <Text style={styles.contTitle}>Force</Text>
                         <View style={styles.boxForceInfo}>
                             <View style={[styles.moyForce, { backgroundColor: backgroundColorForce() }]}>
-                                <Text style={styles.forcePour}>89.72%</Text>
+                                <Text style={styles.forcePour}>{moyenneForce ? moyenneForce.averageGrade.toFixed(2) : 0} %</Text>
                             </View>
-                            <Text style={styles.moyForceText}>PROG1301</Text>
+                            <Text style={styles.moyForceText}>{moyenneForce ? moyenneForce.sigle : ''}</Text>
                         </View>
                     </View>
                     <View style={styles.boxFaiblesse}>
                         <Text style={styles.contTitle}>Faiblesse</Text>
                         <View style={styles.boxFaiblesseInfo}>
                             <View style={[styles.moyFaiblesse, { backgroundColor: backgroundColorFaiblesse() }]}>
-                                <Text style={styles.forcePour}>84.27%</Text>
+                                <Text style={styles.forcePour}>{moyenneFaiblesse ? moyenneFaiblesse.averageGrade.toFixed(2) : 0} %</Text>
                             </View>
-                            <Text style={styles.moyFaiblesseText}>PROG1342</Text>
+                            <Text style={styles.moyFaiblesseText}>{moyenneFaiblesse ? moyenneFaiblesse.sigle : ''}</Text>
                         </View>
                     </View>
                 </View>
