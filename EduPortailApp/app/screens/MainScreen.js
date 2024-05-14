@@ -183,9 +183,9 @@ export default function MainScreen({ navigation }) {
 
     // Couleur du cercle pour le cours fort
     const backgroundColorForce = () => {
-        if (moyenneForce && moyenneSouhaiteeData && moyenneForce.averageGrade >= moyenneSouhaiteeData.moyenneSouhaitee) {
+        if (moyenneForce && moyenneForce.averageGrade !== null && moyenneSouhaiteeData && moyenneForce.averageGrade >= moyenneSouhaiteeData.moyenneSouhaitee) {
             return '#7ac25a';
-        } else if (moyenneSouhaiteeData && moyenneForce.averageGrade >= 60) {
+        } else if (moyenneForce && moyenneForce.averageGrade !== null && moyenneForce.averageGrade >= 60) {
             return '#f1c232';
         } else {
             return '#ff4137';
@@ -194,9 +194,9 @@ export default function MainScreen({ navigation }) {
 
     // Couleur du cercle pour le cours faible
     const backgroundColorFaiblesse = () => {
-        if (moyenneFaiblesse && moyenneSouhaiteeData && moyenneFaiblesse.averageGrade >= moyenneSouhaiteeData.moyenneSouhaitee) {
+        if (moyenneFaiblesse && moyenneFaiblesse.averageGrade !== null && moyenneSouhaiteeData && moyenneFaiblesse.averageGrade >= moyenneSouhaiteeData.moyenneSouhaitee) {
             return '#7ac25a';
-        } else if (moyenneSouhaiteeData && moyenneFaiblesse.averageGrade >= 60) {
+        } else if (moyenneFaiblesse && moyenneFaiblesse.averageGrade !== null && moyenneFaiblesse.averageGrade >= 60) {
             return '#f1c232';
         } else {
             return '#ff4137';
