@@ -28,10 +28,22 @@ export default function PerfInfoScreen(props) {
     const [moyDData, setMoyDData] = useState(null);
     const [loading, setLoading] = useState(true);
 
+
+    //Liens BD locale
+    /*
     const urlEval = `http://192.168.56.1:3000/api/evaluations/inscription/${idInscription}`;
     const urlEvalTotal = `http://192.168.56.1:3000/api/evaluations/matricule/${matriculeVar}`;
     const urlClass = `http://192.168.56.1:3000/api/cours/${matriculeVar}`;
     const urlMoyD = `http://192.168.56.1:3000/api/moyenneSouhaitee/${matriculeVar}`;
+    */
+
+    //Liens BD remote
+
+    const urlEval = `https://eduportail-69af4de32dad.herokuapp.com/api/evaluations/inscription/${idInscription}`;
+    const urlEvalTotal = `https://eduportail-69af4de32dad.herokuapp.com/api/evaluations/matricule/${matriculeVar}`;
+    const urlClass = `https://eduportail-69af4de32dad.herokuapp.com/api/cours/${matriculeVar}`;
+    const urlMoyD = `https://eduportail-69af4de32dad.herokuapp.com/api/moyenneSouhaitee/${matriculeVar}`;
+
 
     const fetchData = (url, setData) => {
         fetch(url)

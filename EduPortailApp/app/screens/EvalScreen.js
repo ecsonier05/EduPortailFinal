@@ -9,8 +9,18 @@ export default function EvalScreen({ navigation }) {
     const [sessionActData, setSessionActData] = useState(null);
     const [loading, setLoading] = useState(true);
 
+
+    // Liens BD locale
+    /*
     const urlClass = `http://192.168.56.1:3000/api/cours/${matriculeVar}`;
     const urlSessionAct = `http://192.168.56.1:3000/api/sessionactuelle/${matriculeVar}`;
+    */
+
+    // Liens BD remote
+
+    const urlClass = `https://eduportail-69af4de32dad.herokuapp.com/api/cours/${matriculeVar}`;
+    const urlSessionAct = `https://eduportail-69af4de32dad.herokuapp.com/api/sessionactuelle/${matriculeVar}`;
+
 
     useEffect(() => {
         fetchData(urlClass, setClassData);

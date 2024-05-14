@@ -14,7 +14,16 @@ function PerfScreen({ navigation }) {
     const [classData, setClassData] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    const urlClass = `http://192.168.56.1:3000/api/cours/${matriculeVar}`;
+
+    // Liens BD locale
+
+    // const urlClass = `http://192.168.56.1:3000/api/cours/${matriculeVar}`;
+
+
+    // Liens BD remote
+
+    const urlClass = `https://eduportail-69af4de32dad.herokuapp.com/api/cours/${matriculeVar}`;
+
 
     useEffect(() => {
         fetchData(urlClass, setClassData);
